@@ -3,11 +3,12 @@ using System.Collections;
 
 public class PlayerScript : MonoBehaviour {
 
-	public Transform plane;
+	public GameObject plane;
 
 	// Use this for initialization
 	void Start () {
-	
+		Instantiate (plane);
+		plane.SetActive (true);
 	}
 	
 	// Update is called once per frame
@@ -15,8 +16,8 @@ public class PlayerScript : MonoBehaviour {
 		if (Input.GetMouseButtonDown (0)) {
 			Debug.Log ("click");
 			reset();
-			plane.Rotate (0, Random.Range (0, 360), 0);
-			plane.transform.Translate (Random.Range (0, 2), 0, Random.Range (0, 2));
+			plane.transform.Rotate (0, 0, Random.Range (0, 360));
+			plane.transform.Translate (Random.Range (0, 0.25f), Random.Range (0, 0.25f), 0);
 		}
 	}
 
@@ -32,7 +33,7 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	void resetWorld(){
-		plane.transform.eulerAngles = new Vector3(45, 180, 0);
+		plane.transform.eulerAngles = new Vector3(-135, 0, 0);
 		plane.transform.position = new Vector3(0, 0, .75f);
 	}
 }

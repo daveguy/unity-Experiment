@@ -1,6 +1,0 @@
-sin(2*x + y) + sin(4*x + 3*y) + sin(8*x + 8*y) + sin(3*x + 9*y)
-
-fx = Sin[{x, y}.{Round[RandomReal[]*10], Round[RandomReal[]*10]}] + 
-  Sin[{x, y}.{Round[RandomReal[]*10], Round[RandomReal[]*10]}] + 
-  Sin[{x, y}.{Round[RandomReal[]*10], Round[RandomReal[]*10]}] + 
-  Sin[{x, y}.{Round[RandomReal[]*10], Round[RandomReal[]*10]}]

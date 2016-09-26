@@ -1,42 +1,24 @@
 fileFormatVersion: 2
-guid: 1d90aa2689d79a74aba9bf838c4b20ec
-timeCreated: 1470673356
+guid: 3caeac254199a664cb589f7b705c707e
+timeCreated: 1472833827
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Z Function.003_MeshPart0
-    100004: Z Function.003_MeshPart1
-    100006: Z Function.004_MeshPart0
-    100008: Z Function.004_MeshPart1
-    100010: Z Function.004_MeshPart2
-    100012: Z Function.004_MeshPart3
+    100002: Plane
+    100004: Plane.001
     400000: //RootNode
-    400002: Z Function.003_MeshPart0
-    400004: Z Function.003_MeshPart1
-    400006: Z Function.004_MeshPart0
-    400008: Z Function.004_MeshPart1
-    400010: Z Function.004_MeshPart2
-    400012: Z Function.004_MeshPart3
-    2300000: Z Function.003_MeshPart0
-    2300002: Z Function.003_MeshPart1
-    2300004: Z Function.004_MeshPart0
-    2300006: Z Function.004_MeshPart1
-    2300008: Z Function.004_MeshPart2
-    2300010: Z Function.004_MeshPart3
-    3300000: Z Function.003_MeshPart0
-    3300002: Z Function.003_MeshPart1
-    3300004: Z Function.004_MeshPart0
-    3300006: Z Function.004_MeshPart1
-    3300008: Z Function.004_MeshPart2
-    3300010: Z Function.004_MeshPart3
-    4300000: Z Function.003_MeshPart0
-    4300002: Z Function.003_MeshPart1
-    4300004: Z Function.004_MeshPart0
-    4300006: Z Function.004_MeshPart1
-    4300008: Z Function.004_MeshPart2
-    4300010: Z Function.004_MeshPart3
+    400002: Plane
+    400004: Plane.001
+    2300000: Plane
+    2300002: Plane.001
+    2300004: //RootNode
+    3300000: Plane
+    3300002: Plane.001
+    3300004: //RootNode
+    4300000: Plane.001
+    4300002: Plane
   materials:
     importMaterials: 1
     materialName: 0
@@ -79,7 +61,7 @@ ModelImporter:
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
-    tangentImportMode: 0
+    tangentImportMode: 3
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
