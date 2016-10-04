@@ -9,3 +9,6 @@ Use "Reset camera on load" so that the camera is where you've specified it to be
 
 OVR CameraRig:
 -Set left and right eye anchor cliping planes to 0, otherwie the scenery starts to disapear in a wierd way. 
+
+QUESTIONS:
+For a pair of surfaces do we show the same surface, at different angles? meaning no rotation or translation, just angle change. Or do we show new surface
