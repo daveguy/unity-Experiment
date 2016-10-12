@@ -29,13 +29,16 @@ public class PlayerScript : MonoBehaviour {
 
 	public GameObject planeMatte;
 	public GameObject planeGlossy;
+	public float viewTime;
 
 	private GameObject planeConstant;
 	private GameObject planeVariable;
 	private Staircase staircase;
-
 	enum LastViewed {constant, variable};
 	private LastViewed lastViewed;
+	private bool firstSurface;
+	private System.DateTime surfaceStartTime;
+
 	private bool matte = true;
 	private float startingDiff = 15;
 	// Use this for initialization
@@ -50,6 +53,9 @@ public class PlayerScript : MonoBehaviour {
 			Debug.Log ("click");
 			set();
 		}
+		if (firstSurface && (System.DateTime.Now - surfaceStartTime).TotalSeconds > viewTime) {
+			set ();
+		}
 		if(Input.GetKeyDown(KeyCode.LeftControl)){
 			staircase.feedbackRight ();
 			set ();
@@ -58,12 +64,6 @@ public class PlayerScript : MonoBehaviour {
 			staircase.feedbackWrong ();
 			set ();
 		}
-		if (Input.GetKeyDown (KeyCode.LeftArrow)) {
-			Transform t = planeConstant.transform.GetChild(0);
-			t.Translate (-5, 0, 0);
-			//Debug.Log(planeConstant.transform.childCount);
-		}
-			
 	}
 
 	void setFirst(){
@@ -72,32 +72,39 @@ public class PlayerScript : MonoBehaviour {
 		reset (planeConstant, staircase.baseAngle);
 		planeConstant.transform.Rotate (0, Random.Range (0, 360), 0, Space.Self);
 		planeConstant.transform.Translate (Random.Range (0, 0.25f), 0, Random.Range (0, 0.25f), Space.Self);
-		reset (planeVariable, staircase.baseAngle);
-		planeVariable.transform.Rotate((Random.value > 0.5 ? staircase.currentDiff : -staircase.currentDiff), 0, 0, Space.World);
-		planeVariable.transform.Rotate (0, Random.Range (0, 360), 0, Space.Self);
-		planeVariable.transform.Translate (Random.Range (0, 0.25f), 0, Random.Range (0, 0.25f), Space.Self);
+		//reset (planeVariable, staircase.baseAngle);
+		//staircase.currentDiff = Random.value > 0.5 ? staircase.currentDiff : -staircase.currentDiff;
+		//planeVariable.transform.Rotate(staircase.currentDiff, 0, 0, Space.World);
+		//planeVariable.transform.Rotate (0, Random.Range (0, 360), 0, Space.Self);
+		//planeVariable.transform.Translate (Random.Range (0, 0.25f), 0, Random.Range (0, 0.25f), Space.Self);
 
 		planeConstant.SetActive (true);
 		lastViewed = LastViewed.constant;
+		firstSurface = true;
+		surfaceStartTime = System.DateTime.Now;
+		Debug.Log (staircase.currentDiff);
 	}
 
 	void set(){
-		reset (planeConstant, staircase.baseAngle);
-		planeConstant.transform.Rotate (0, Random.Range (0, 360), 0, Space.Self);
-		planeConstant.transform.Translate (Random.Range (0, 0.25f), 0, Random.Range (0, 0.25f), Space.Self);
-		reset (planeVariable, staircase.baseAngle);
-		planeVariable.transform.Rotate((Random.value > 0.5 ? staircase.currentDiff : -staircase.currentDiff), 0, 0, Space.World);
-		planeVariable.transform.Rotate (0, Random.Range (0, 360), 0, Space.Self);
-		planeVariable.transform.Translate (Random.Range (0, 0.25f), 0, Random.Range (0, 0.25f), Space.Self);
 		if (lastViewed == LastViewed.constant) {
+			//staircase.currentDiff = Random.value > 0.5 ? staircase.currentDiff : -staircase.currentDiff;
+			reset (planeVariable, staircase.baseAngle);
+			planeVariable.transform.Rotate(staircase.currentDiff, 0, 0, Space.World);
+			planeVariable.transform.Rotate (0, Random.Range (0, 360), 0, Space.Self);
+			planeVariable.transform.Translate (Random.Range (0, 0.25f), 0, Random.Range (0, 0.25f), Space.Self);
 			planeConstant.SetActive (false);
 			planeVariable.SetActive (true);
 			lastViewed = LastViewed.variable;
 		} else {
+			reset (planeConstant, staircase.baseAngle);
+			planeConstant.transform.Rotate (0, Random.Range (0, 360), 0, Space.Self);
+			planeConstant.transform.Translate (Random.Range (0, 0.25f), 0, Random.Range (0, 0.25f), Space.Self);
 			planeConstant.SetActive (true);
 			planeVariable.SetActive (false);
 			lastViewed = LastViewed.constant;
 		}
+		surfaceStartTime = System.DateTime.Now;
+		Debug.Log (staircase.currentDiff);
 	}
 
 	//reset surface before random rotation/translation
