@@ -10,5 +10,16 @@ Use "Reset camera on load" so that the camera is where you've specified it to be
 OVR CameraRig:
 -Set left and right eye anchor cliping planes to 0, otherwie the scenery starts to disapear in a wierd way. 
 
+From Knill, 2003:
+Trials began with a 250 ms presentation of the fixation point alone, followed by a pair of slanted surfaces, each displayed for 1000 ms. Between pairs of surfaces, there was a 500 ms delay with a blank screen and new fixation point, presented at the depth of the second stimulus. After both surfaces were presented, the display remained blank until the subject made a response, which initiated the next trial. Except for the initial practice trials in the first session, no feedback was given
+
 QUESTIONS:
-For a pair of surfaces do we show the same surface, at different angles? meaning no rotation or translation, just angle change. Or do we show new surface
+For a pair of surfaces do we show the same surface, at different angles? meaning no rotation or translation, just angle change. Or do we show new surface (new will be the same model, but rotated & translated slightly)
+
+
+not surehow to transition, mask? black screen?
+
+Questions for Mike:
+Knill puts a reference dot, inbetween surfaces, at the point of fixation (center where distance is what you want), should we do that?
+
+How do you step? fixed amount or ratio?

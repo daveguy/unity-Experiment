@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Staircase{
 	public bool matte;
@@ -30,21 +31,29 @@ public class PlayerScript : MonoBehaviour {
 	public GameObject planeMatte;
 	public GameObject planeGlossy;
 	public float viewTime;
+	public GameObject mask;
+	public Text message;
 
 	private GameObject planeConstant;
 	private GameObject planeVariable;
 	private Staircase staircase;
 	enum LastViewed {constant, variable};
 	private LastViewed lastViewed;
-	private bool firstSurface;
 	private System.DateTime surfaceStartTime;
+
+	private int status;//1 = first surface, 2 =  second surface, 3 = wait for choice
 
 	private bool matte = true;
 	private float startingDiff = 15;
 	// Use this for initialization
 	void Start () {
 		staircase = new Staircase (matte, -45, startingDiff);
-		setFirst ();
+		planeConstant = Instantiate (planeMatte) as GameObject;
+		planeVariable = Instantiate (planeMatte) as GameObject;
+		mask.SetActive (false);
+		message.text = "";
+		status = 1;
+		set ();
 	}
 
 	// Update is called once per frame
@@ -53,43 +62,38 @@ public class PlayerScript : MonoBehaviour {
 			Debug.Log ("click");
 			set();
 		}
-		if (firstSurface && (System.DateTime.Now - surfaceStartTime).TotalSeconds > viewTime) {
+		message.text = status.ToString() + "      " + lastViewed.ToString();
+		if (status == 1 && (System.DateTime.Now - surfaceStartTime).TotalSeconds > viewTime) {
+			status = 2;
 			set ();
+		} else if (status == 2 && (System.DateTime.Now - surfaceStartTime).TotalSeconds > viewTime) {
+			status = 3;
+			setWait ();
+		} else if(status == 3){
+			if (Input.GetKeyDown (KeyCode.LeftControl)) {
+				staircase.feedbackRight ();
+				mask.SetActive (false);
+				message.text = "";
+				status = 1;
+				set ();
+			}
+			if (Input.GetKeyDown (KeyCode.RightControl)) {
+				staircase.feedbackWrong ();
+				mask.SetActive (false);
+				message.text = "";
+				status = 1;
+				set ();
+			}
 		}
-		if(Input.GetKeyDown(KeyCode.LeftControl)){
-			staircase.feedbackRight ();
-			set ();
-		}
-		if (Input.GetKeyDown (KeyCode.RightControl)) {
-			staircase.feedbackWrong ();
-			set ();
-		}
-	}
-
-	void setFirst(){
-		planeConstant = Instantiate (planeMatte) as GameObject;
-		planeVariable = Instantiate (planeMatte) as GameObject;
-		reset (planeConstant, staircase.baseAngle);
-		planeConstant.transform.Rotate (0, Random.Range (0, 360), 0, Space.Self);
-		planeConstant.transform.Translate (Random.Range (0, 0.25f), 0, Random.Range (0, 0.25f), Space.Self);
-		//reset (planeVariable, staircase.baseAngle);
-		//staircase.currentDiff = Random.value > 0.5 ? staircase.currentDiff : -staircase.currentDiff;
-		//planeVariable.transform.Rotate(staircase.currentDiff, 0, 0, Space.World);
-		//planeVariable.transform.Rotate (0, Random.Range (0, 360), 0, Space.Self);
-		//planeVariable.transform.Translate (Random.Range (0, 0.25f), 0, Random.Range (0, 0.25f), Space.Self);
-
-		planeConstant.SetActive (true);
-		lastViewed = LastViewed.constant;
-		firstSurface = true;
-		surfaceStartTime = System.DateTime.Now;
-		Debug.Log (staircase.currentDiff);
 	}
 
 	void set(){
+		if (status == 1) {// pick which pair to show first
+			lastViewed = Random.value > 0.5 ? LastViewed.constant : LastViewed.variable;
+		}
 		if (lastViewed == LastViewed.constant) {
-			//staircase.currentDiff = Random.value > 0.5 ? staircase.currentDiff : -staircase.currentDiff;
 			reset (planeVariable, staircase.baseAngle);
-			planeVariable.transform.Rotate(staircase.currentDiff, 0, 0, Space.World);
+			planeVariable.transform.Rotate(-staircase.currentDiff, 0, 0, Space.World);
 			planeVariable.transform.Rotate (0, Random.Range (0, 360), 0, Space.Self);
 			planeVariable.transform.Translate (Random.Range (0, 0.25f), 0, Random.Range (0, 0.25f), Space.Self);
 			planeConstant.SetActive (false);
@@ -103,10 +107,17 @@ public class PlayerScript : MonoBehaviour {
 			planeVariable.SetActive (false);
 			lastViewed = LastViewed.constant;
 		}
+		//firstSurface = false;
 		surfaceStartTime = System.DateTime.Now;
-		Debug.Log (staircase.currentDiff);
+		//Debug.Log (staircase.currentDiff);
 	}
 
+	void setWait(){
+		mask.SetActive (true);
+		//message.text = "Please make a selection\nleft control for the first surface\t right control for the second surface";
+		planeConstant.SetActive (false);
+		planeVariable.SetActive (false);
+	}
 	//reset surface before random rotation/translation
 	void reset(GameObject plane, float baseAngle){
 		
