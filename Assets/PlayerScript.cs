@@ -8,7 +8,7 @@ public class Staircase{
 
 	public float baseAngle;
 
-	static float upRate = 0.8f;
+	static float upRate = 1.2f;
 	static float downRate = 0.8f;
 
 	public Staircase(bool matte, float baseAngle, float startingDiff){
@@ -36,8 +36,9 @@ public class PlayerScript : MonoBehaviour {
 	public GameObject mask;
 	public Text message;
 
-	private GameObject planeConstant;
-	private GameObject planeVariable;
+//	private GameObject planeConstant;
+//	private GameObject planeVariable;
+	private GameObject currentPlane;
 	private Staircase[] allStaircases;
 	private Staircase currentStaircase;
 	enum LastViewed {constant, variable};
@@ -71,37 +72,29 @@ public class PlayerScript : MonoBehaviour {
 			if (Input.GetKeyDown (KeyCode.LeftControl)) {
 				currentStaircase.feedbackRight ();
 				changeStaircase ();
-				//mask.SetActive (false);
-				//message.text = "";
-				//status = 1;
-				//set ();
 			}
 			if (Input.GetKeyDown (KeyCode.RightControl)) {
 				currentStaircase.feedbackWrong ();
 				changeStaircase ();
-//				mask.SetActive (false);
-//				message.text = "";
-//				status = 1;
-//				set ();
 			}
 		}
 	}
 
 	void changeStaircase(){
-		Destroy (planeConstant);
-		Destroy (planeMatte);
-		System.GC.Collect ();
 		currentStaircase = allStaircases [0];//fix this to pick random, unfinished staircase
 		if (currentStaircase.matte) {
-			planeConstant = Instantiate (planeMatte) as GameObject;
-			planeVariable = Instantiate (planeMatte) as GameObject;
+			currentPlane = planeMatte;
+//			planeConstant = Instantiate (planeMatte) as GameObject;
+//			planeVariable = Instantiate (planeMatte) as GameObject;
 		} else {
-			planeConstant = Instantiate (planeGlossy) as GameObject;
-			planeVariable = Instantiate (planeGlossy) as GameObject;
+			currentPlane = planeGlossy;
+//			planeConstant = Instantiate (planeGlossy) as GameObject;
+//			planeVariable = Instantiate (planeGlossy) as GameObject;
 		}
 		mask.SetActive (false);
 		message.text = "";
 		status = 1;
+		currentPlane.SetActive (true);
 		set ();
 	}
 
@@ -110,19 +103,19 @@ public class PlayerScript : MonoBehaviour {
 			lastViewed = Random.value > 0.5 ? LastViewed.constant : LastViewed.variable;
 		}
 		if (lastViewed == LastViewed.constant) {
-			reset (planeVariable, currentStaircase.baseAngle);
-			planeVariable.transform.Rotate(-currentStaircase.currentDiff, 0, 0, Space.World);
-			planeVariable.transform.Rotate (0, Random.Range (0, 360), 0, Space.Self);
-			planeVariable.transform.Translate (Random.Range (0, 0.25f), 0, Random.Range (0, 0.25f), Space.Self);
-			planeConstant.SetActive (false);
-			planeVariable.SetActive (true);
+			reset (currentPlane, currentStaircase.baseAngle);
+			currentPlane.transform.Rotate(-currentStaircase.currentDiff, 0, 0, Space.World);
+			currentPlane.transform.Rotate (0, Random.Range (0, 360), 0, Space.Self);
+			currentPlane.transform.Translate (Random.Range (0, 0.25f), 0, Random.Range (0, 0.25f), Space.Self);
+//			planeConstant.SetActive (false);
+//			planeVariable.SetActive (true);
 			lastViewed = LastViewed.variable;
 		} else {
-			reset (planeConstant, currentStaircase.baseAngle);
-			planeConstant.transform.Rotate (0, Random.Range (0, 360), 0, Space.Self);
-			planeConstant.transform.Translate (Random.Range (0, 0.25f), 0, Random.Range (0, 0.25f), Space.Self);
-			planeConstant.SetActive (true);
-			planeVariable.SetActive (false);
+			reset (currentPlane, currentStaircase.baseAngle);
+			currentPlane.transform.Rotate (0, Random.Range (0, 360), 0, Space.Self);
+			currentPlane.transform.Translate (Random.Range (0, 0.25f), 0, Random.Range (0, 0.25f), Space.Self);
+//			planeConstant.SetActive (true);
+//			planeVariable.SetActive (false);
 			lastViewed = LastViewed.constant;
 		}
 		surfaceStartTime = System.DateTime.Now;
@@ -131,8 +124,9 @@ public class PlayerScript : MonoBehaviour {
 	void setWait(){
 		mask.SetActive (true);
 		message.text = "Please make a selection\nleft control for the first surface\t right control for the second surface";
-		planeConstant.SetActive (false);
-		planeVariable.SetActive (false);
+		currentPlane.SetActive (false);
+//		planeConstant.SetActive (false);
+//		planeVariable.SetActive (false);
 	}
 	//reset surface before random rotation/translation
 	void reset(GameObject plane, float baseAngle){
