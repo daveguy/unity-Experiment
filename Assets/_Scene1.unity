@@ -1156,7 +1156,7 @@ MeshRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 2100000, guid: 91a7146ad6f441a49943b36802760cef, type: 2}
+  - {fileID: 2100000, guid: 78e1b76a8a56d7a4aa3334aa9cf695b4, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
@@ -1855,7 +1855,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1895340652
 RectTransform:
   m_ObjectHideFlags: 0

@@ -78,13 +78,23 @@ public class PlayerScript : MonoBehaviour {
 			status = Status.RESPONSE;
 			setWait ();
 		} else if(status == Status.RESPONSE){
-			if (Input.GetKeyDown (KeyCode.LeftControl)) {
-				currentStaircase.feedbackRight ();
-				changeStaircase ();
+			if (Input.GetKeyDown (KeyCode.LeftControl) ) {
+				if (lastViewed == LastViewed.VARIABLE) {
+					currentStaircase.feedbackRight ();
+					changeStaircase ();
+				}else{
+					currentStaircase.feedbackWrong ();
+					changeStaircase ();
+				}
 			}
 			if (Input.GetKeyDown (KeyCode.RightControl)) {
-				currentStaircase.feedbackWrong ();
-				changeStaircase ();
+				if (lastViewed == LastViewed.CONSTANT) {
+					currentStaircase.feedbackRight ();
+					changeStaircase ();
+				} else {
+					currentStaircase.feedbackWrong ();
+					changeStaircase ();
+				}
 			}
 		}
 	}
@@ -114,12 +124,12 @@ public class PlayerScript : MonoBehaviour {
 				currentPlane.transform.Rotate (-currentStaircase.currentDiff, 0, 0, Space.World);
 				currentPlane.transform.Rotate (0, Random.Range (0, 360), 0, Space.Self);
 				currentPlane.transform.Translate (Random.Range (0, 0.25f), 0, Random.Range (0, 0.25f), Space.Self);
-			lastViewed = LastViewed.VARIABLE;
+				lastViewed = LastViewed.VARIABLE;
 			} else {
 				reset (currentPlane, currentStaircase.baseAngle);
 				currentPlane.transform.Rotate (0, Random.Range (0, 360), 0, Space.Self);
 				currentPlane.transform.Translate (Random.Range (0, 0.25f), 0, Random.Range (0, 0.25f), Space.Self);
-			lastViewed = LastViewed.CONSTANT;
+				lastViewed = LastViewed.CONSTANT;
 			}
 			surfaceStartTime = System.DateTime.Now;
 	}
