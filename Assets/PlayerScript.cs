@@ -35,6 +35,7 @@ public class PlayerScript : MonoBehaviour {
 	public float viewFocusTime;
 	public GameObject mask;
 	public Text message;
+	public Text errorMessage;
 
 	private GameObject currentPlane;
 	private Staircase[] allStaircases;
@@ -42,8 +43,9 @@ public class PlayerScript : MonoBehaviour {
 	enum LastViewed {CONSTANT, VARIABLE};
 	private LastViewed lastViewed;
 	enum Status {VIEWFOCUS, FIRSTSURFACE, SECONDSURFACE, RESPONSE};
+	private Status status;
 	private System.DateTime surfaceStartTime;
-	private Status status;//1 = first surface, 2 =  second surface, 3 = display focus sphere, 4 = wait for response
+	private System.DateTime focusStartTime;
 
 
 	private bool matte = true;
@@ -59,17 +61,23 @@ public class PlayerScript : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetMouseButtonDown (0)) {
-			Debug.Log ("click");
-			set();
-		}
-		if (status ==Status.FIRSTSURFACE && (System.DateTime.Now - surfaceStartTime).TotalSeconds > viewTime) {
+//		if (Input.GetMouseButtonDown (0)) {
+//			Debug.Log ("click");
+//			set();
+//		}
+		//errorMessage.text = status.ToString() + "\n" + focusTime.ToString() + "\n" + focusPoint.activeInHierarchy;
+		if (focusTime){
+			if ((System.DateTime.Now - focusStartTime).TotalSeconds > viewFocusTime) {
+				focusTime = false;
+				set ();
+			}
+		} else if (status ==Status.FIRSTSURFACE && (System.DateTime.Now - surfaceStartTime).TotalSeconds > viewTime) {
 			status = Status.SECONDSURFACE;
-			set ();
+			setFocus ();
 		} else if (status == Status.SECONDSURFACE && (System.DateTime.Now - surfaceStartTime).TotalSeconds > viewTime) {
 			status = Status.RESPONSE;
 			setWait ();
-		}else if(status == Status.RESPONSE){
+		} else if(status == Status.RESPONSE){
 			if (Input.GetKeyDown (KeyCode.LeftControl)) {
 				currentStaircase.feedbackRight ();
 				changeStaircase ();
@@ -91,11 +99,13 @@ public class PlayerScript : MonoBehaviour {
 		mask.SetActive (false);
 		message.text = "";
 		status = Status.FIRSTSURFACE;
-		currentPlane.SetActive (true);
-		set ();
+//		currentPlane.SetActive (true);
+		setFocus ();
 	}
 
 	void set(){
+		focusPoint.SetActive (false);
+		currentPlane.SetActive (true);
 		if (status == Status.FIRSTSURFACE) {// pick which pair to show first
 			lastViewed = Random.value > 0.5 ? LastViewed.CONSTANT : LastViewed.VARIABLE;
 			}
@@ -112,7 +122,6 @@ public class PlayerScript : MonoBehaviour {
 			lastViewed = LastViewed.CONSTANT;
 			}
 			surfaceStartTime = System.DateTime.Now;
-
 	}
 
 	void setWait(){
@@ -120,6 +129,14 @@ public class PlayerScript : MonoBehaviour {
 		currentPlane.SetActive (false);
 		message.text = "Please make a selection\nleft control for the first surface\t right control for the second surface";
 	}
+
+	void setFocus(){
+		focusPoint.SetActive (true);
+		currentPlane.SetActive (false);
+		focusTime = true;
+		focusStartTime = System.DateTime.Now;
+	}
+
 	//reset surface before random rotation/translation
 	void reset(GameObject plane, float baseAngle){
 		
