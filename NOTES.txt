@@ -19,8 +19,9 @@ by a factor 0.8. When the observer answered incorrectly,
 DeltaZ was increased by a factor 2.19.
 
 BLENDER NOTES: Remember to make space UV, smart UV project before displace modify
-for size 2 ~2 million verts and verts seems to work, another subdivide starts to have artifacts
-for size 3 ~ 279 000 verts, displace strength 0.04. Bake with 0 margin, 16000 max verts
+for size 2 ~1 million verts seems to work, another subdivide starts to have artifacts
+for size 3 ~ 279 000 verts, displace strength 0.075. Bake with 0 margin, 16000 max verts
+
 QUESTIONS:
 For a pair of surfaces do we show the same surface, at different angles? meaning no rotation or translation, just angle change. Or do we show new surface (new will be the same model, but rotated & translated slightly)
 

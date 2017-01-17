@@ -5,24 +5,57 @@ using UnityEngine.UI;
 public class Staircase{
 	public bool matte;
 	public float currentDiff;
-
 	public float baseAngle;
+	public bool finished;
 
-	static float upRate = 1.2f;
+	enum LastFeedback {RIGHT, WRONG};
+	private LastFeedback lastFeedback;
+	private float[] reversals;
+	private int maxReversals = 12;
+	private int numReversalsToUse = 10;
+	private int reversalCount;
+
+	//0.8 comes from Haomin's code, 2.81 is corresponding value to hit one up-one down value from "Forced-choice staircases with fixed step sizes: asymptotic and small-sample properties"
+	static float upRate = 2.81f;
 	static float downRate = 0.8f;
 
 	public Staircase(bool matte, float baseAngle, float startingDiff){
 		this.matte = matte;
 		this.baseAngle = baseAngle;
 		this.currentDiff = startingDiff;
+		this.reversals = new float[maxReversals];
+		this.finished = false;
+		this.reversalCount = 0;
 	}
 
-	public void feedbackRight(){
-		currentDiff = currentDiff * downRate;
+	public void feedbackRight ()
+	{
+		if (lastFeedback != LastFeedback.RIGHT) {
+			reversals [reversalCount] = currentDiff;
+			reversalCount++;
+			lastFeedback = LastFeedback.RIGHT;
+			currentDiff = currentDiff * downRate;
+		} else {
+			currentDiff = currentDiff * downRate;
+		}
+		if (reversalCount == maxReversals) {
+			finished = true;
+		}
 	}
 
-	public void feedbackWrong(){
-		currentDiff = currentDiff * upRate;
+	public void feedbackWrong ()
+	{
+		if (lastFeedback != LastFeedback.WRONG) {
+			reversals [reversalCount] = currentDiff;
+			reversalCount++;
+			lastFeedback = LastFeedback.WRONG;
+			currentDiff = currentDiff * upRate;
+		} else {
+			currentDiff = currentDiff * upRate;
+		}
+		if (reversalCount == maxReversals) {
+			finished = true;
+		}
 	}
 }
 
@@ -47,7 +80,6 @@ public class PlayerScript : MonoBehaviour {
 	private System.DateTime surfaceStartTime;
 	private System.DateTime focusStartTime;
 
-
 	private bool matte = true;
 	private bool focusTime = true;
 	private float startingDiff = 15;
@@ -61,10 +93,6 @@ public class PlayerScript : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-//		if (Input.GetMouseButtonDown (0)) {
-//			Debug.Log ("click");
-//			set();
-//		}
 		//errorMessage.text = status.ToString() + "\n" + focusTime.ToString() + "\n" + focusPoint.activeInHierarchy;
 		if (focusTime){
 			if ((System.DateTime.Now - focusStartTime).TotalSeconds > viewFocusTime) {
@@ -87,7 +115,7 @@ public class PlayerScript : MonoBehaviour {
 					changeStaircase ();
 				}
 			}
-			if (Input.GetKeyDown (KeyCode.RightControl)) {
+			else if (Input.GetKeyDown (KeyCode.RightControl)) {
 				if (lastViewed == LastViewed.CONSTANT) {
 					currentStaircase.feedbackRight ();
 					changeStaircase ();
@@ -100,7 +128,7 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	void changeStaircase(){
-		currentStaircase = allStaircases [0];//fix this to pick random, unfinished staircase
+		currentStaircase = getStaircase();
 		if (currentStaircase.matte) {
 			currentPlane = planeMatte;
 		} else {
@@ -109,8 +137,31 @@ public class PlayerScript : MonoBehaviour {
 		mask.SetActive (false);
 		message.text = "";
 		status = Status.FIRSTSURFACE;
-//		currentPlane.SetActive (true);
 		setFocus ();
+	}
+
+	Staircase getStaircase (){
+		Staircase s;
+		if (!hasRemainingStaircase ()) {
+			return null;
+		}else{
+			do{
+				s = allStaircases[Random.Range(0, allStaircases.Length)];
+			}while(s.finished);
+		}
+		return s;
+	}
+
+	bool hasRemainingStaircase ()
+	{
+		bool hasRemaining = false;
+		foreach (Staircase s in allStaircases) {
+			if (!s.finished) {
+				hasRemaining = true;
+				break;
+			}
+		}
+		return hasRemaining;
 	}
 
 	void set(){
