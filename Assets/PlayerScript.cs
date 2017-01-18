@@ -178,30 +178,31 @@ public class PlayerScript : MonoBehaviour {
 		return hasRemaining;
 	}
 
-	float angle;
-	void set(){
+	void set ()
+	{
 		focusPoint.SetActive (false);
 		currentPlane.SetActive (true);
 		if (status == Status.FIRSTSURFACE) {// pick which pair to show first
 			lastViewed = Random.value > 0.5 ? LastViewed.CONSTANT : LastViewed.VARIABLE;
-			}
+		}
 		if (lastViewed == LastViewed.CONSTANT) {
-				angle = Mathf.Max(currentStaircase.baseAngle-currentStaircase.currentDiff, -90);
-				print(angle);
-				reset (currentPlane, 0);
-				currentPlane.transform.Rotate (angle, 0, 0, Space.World);
-				currentPlane.transform.Rotate (0, Random.Range (0, 360), 0, Space.Self);
-				currentPlane.transform.Translate (Random.Range (0, 0.25f), 0, Random.Range (0, 0.25f), Space.Self);
-				surfaceLight.transform.eulerAngles = new Vector3((90 + angle)*2, 0, 0);
-				lastViewed = LastViewed.VARIABLE;
-			} else {
-				reset (currentPlane, currentStaircase.baseAngle);
-				currentPlane.transform.Rotate (0, Random.Range (0, 360), 0, Space.Self);
-				currentPlane.transform.Translate (Random.Range (0, 0.25f), 0, Random.Range (0, 0.25f), Space.Self);
-				surfaceLight.transform.eulerAngles = new Vector3((90 + currentStaircase.baseAngle)*2, 0, 0);
-				lastViewed = LastViewed.CONSTANT;
+			if (currentStaircase.baseAngle - currentStaircase.currentDiff < -90) {
+				currentStaircase.currentDiff = 90 + currentStaircase.baseAngle;
 			}
-			surfaceStartTime = System.DateTime.Now;
+			reset (currentPlane, currentStaircase.baseAngle);
+			currentPlane.transform.Rotate (-currentStaircase.currentDiff, 0, 0, Space.World);
+			currentPlane.transform.Rotate (0, Random.Range (0, 360), 0, Space.Self);
+			currentPlane.transform.Translate (Random.Range (0, 0.25f), 0, Random.Range (0, 0.25f), Space.Self);
+			surfaceLight.transform.eulerAngles = new Vector3((90 + (currentStaircase.baseAngle - currentStaircase.currentDiff))*2, 0, 0);
+			lastViewed = LastViewed.VARIABLE;
+		} else {
+			reset (currentPlane, currentStaircase.baseAngle);
+			currentPlane.transform.Rotate (0, Random.Range (0, 360), 0, Space.Self);
+			currentPlane.transform.Translate (Random.Range (0, 0.25f), 0, Random.Range (0, 0.25f), Space.Self);
+			surfaceLight.transform.eulerAngles = new Vector3((90 + currentStaircase.baseAngle)*2, 0, 0);
+			lastViewed = LastViewed.CONSTANT;
+		}
+		surfaceStartTime = System.DateTime.Now;
 	}
 
 	void setWait(){
