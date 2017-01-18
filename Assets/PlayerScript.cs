@@ -64,6 +64,7 @@ public class PlayerScript : MonoBehaviour {
 	public GameObject planeMatte;
 	public GameObject planeGlossy;
 	public GameObject focusPoint;
+	public GameObject surfaceLight;
 	public float viewTime;
 	public float viewFocusTime;
 	public GameObject mask;
@@ -80,21 +81,27 @@ public class PlayerScript : MonoBehaviour {
 	private System.DateTime surfaceStartTime;
 	private System.DateTime focusStartTime;
 
+	private bool finished = false;
 	private bool matte = true;
-	private bool focusTime = true;
+	private bool focusTime;
 	private float startingDiff = 15;
 
 	// Use this for initialization
 	void Start () {
 		allStaircases = new Staircase[1];
 		allStaircases [0] = new Staircase (matte, -45, startingDiff);
+		//allStaircases [1] = new Staircase (false, -45, startingDiff);
 		changeStaircase ();
 	}
 
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+	{
 		//errorMessage.text = status.ToString() + "\n" + focusTime.ToString() + "\n" + focusPoint.activeInHierarchy;
-		if (focusTime){
+		if (finished) {
+			setFinished ();
+		}
+		else if (focusTime){
 			if ((System.DateTime.Now - focusStartTime).TotalSeconds > viewFocusTime) {
 				focusTime = false;
 				set ();
@@ -127,17 +134,24 @@ public class PlayerScript : MonoBehaviour {
 		}
 	}
 
-	void changeStaircase(){
-		currentStaircase = getStaircase();
-		if (currentStaircase.matte) {
-			currentPlane = planeMatte;
+	void changeStaircase ()
+	{
+		currentStaircase = getStaircase ();
+		if (currentStaircase == null) {
+			//we're done
+			finished = true;
+			return;
 		} else {
-			currentPlane = planeGlossy;
+			if (currentStaircase.matte) {
+				currentPlane = planeMatte;
+			} else {
+				currentPlane = planeGlossy;
+			}
+			mask.SetActive (false);
+			message.text = "";
+			status = Status.FIRSTSURFACE;
+			setFocus ();
 		}
-		mask.SetActive (false);
-		message.text = "";
-		status = Status.FIRSTSURFACE;
-		setFocus ();
 	}
 
 	Staircase getStaircase (){
@@ -164,6 +178,7 @@ public class PlayerScript : MonoBehaviour {
 		return hasRemaining;
 	}
 
+	float angle;
 	void set(){
 		focusPoint.SetActive (false);
 		currentPlane.SetActive (true);
@@ -171,15 +186,19 @@ public class PlayerScript : MonoBehaviour {
 			lastViewed = Random.value > 0.5 ? LastViewed.CONSTANT : LastViewed.VARIABLE;
 			}
 		if (lastViewed == LastViewed.CONSTANT) {
-				reset (currentPlane, currentStaircase.baseAngle);
-				currentPlane.transform.Rotate (-currentStaircase.currentDiff, 0, 0, Space.World);
+				angle = Mathf.Max(currentStaircase.baseAngle-currentStaircase.currentDiff, -90);
+				print(angle);
+				reset (currentPlane, 0);
+				currentPlane.transform.Rotate (angle, 0, 0, Space.World);
 				currentPlane.transform.Rotate (0, Random.Range (0, 360), 0, Space.Self);
 				currentPlane.transform.Translate (Random.Range (0, 0.25f), 0, Random.Range (0, 0.25f), Space.Self);
+				surfaceLight.transform.eulerAngles = new Vector3((90 + angle)*2, 0, 0);
 				lastViewed = LastViewed.VARIABLE;
 			} else {
 				reset (currentPlane, currentStaircase.baseAngle);
 				currentPlane.transform.Rotate (0, Random.Range (0, 360), 0, Space.Self);
 				currentPlane.transform.Translate (Random.Range (0, 0.25f), 0, Random.Range (0, 0.25f), Space.Self);
+				surfaceLight.transform.eulerAngles = new Vector3((90 + currentStaircase.baseAngle)*2, 0, 0);
 				lastViewed = LastViewed.CONSTANT;
 			}
 			surfaceStartTime = System.DateTime.Now;
@@ -196,6 +215,12 @@ public class PlayerScript : MonoBehaviour {
 		currentPlane.SetActive (false);
 		focusTime = true;
 		focusStartTime = System.DateTime.Now;
+	}
+
+	void setFinished (){
+		mask.SetActive(true);
+		currentPlane.SetActive(false);
+		message.text = "The Expirement is finished. Thank you for participating";
 	}
 
 	//reset surface before random rotation/translation

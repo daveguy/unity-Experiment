@@ -1,0 +1,5 @@
+Attach light to surface at correct angle, according to Langer paper -- DONE
+
+Record and output results, make sure you use proper viewing angle, not world space angle.
+
+Set a max angle so it doesn't go bonkers -- DONE
