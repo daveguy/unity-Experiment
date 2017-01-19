@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.IO;
 
 public class Staircase{
 	public bool matte;
@@ -11,25 +12,33 @@ public class Staircase{
 	enum LastFeedback {RIGHT, WRONG};
 	private LastFeedback lastFeedback;
 	private float[] reversals;
+	private float[] results;
+	int currentStep = 0;
 	private int maxReversals = 12;
 	private int numReversalsToUse = 10;
 	private int reversalCount;
+	private string filename;
+	private float finalResult;
 
 	//0.8 comes from Haomin's code, 2.81 is corresponding value to hit one up-one down value from "Forced-choice staircases with fixed step sizes: asymptotic and small-sample properties"
 	static float upRate = 2.81f;
 	static float downRate = 0.8f;
 
-	public Staircase(bool matte, float baseAngle, float startingDiff){
+	public Staircase(bool matte, float baseAngle, float startingDiff, string filename){
 		this.matte = matte;
 		this.baseAngle = baseAngle;
 		this.currentDiff = startingDiff;
+		this.filename = filename;
 		this.reversals = new float[maxReversals];
 		this.finished = false;
 		this.reversalCount = 0;
+		this.results = new float[500];
 	}
 
 	public void feedbackRight ()
 	{
+		results[currentStep] = currentDiff;
+		currentStep++;
 		if (lastFeedback != LastFeedback.RIGHT) {
 			reversals [reversalCount] = currentDiff;
 			reversalCount++;
@@ -40,11 +49,14 @@ public class Staircase{
 		}
 		if (reversalCount == maxReversals) {
 			finished = true;
+			outputResult();
 		}
 	}
 
 	public void feedbackWrong ()
 	{
+		results[currentStep] = currentDiff;
+		currentStep++;
 		if (lastFeedback != LastFeedback.WRONG) {
 			reversals [reversalCount] = currentDiff;
 			reversalCount++;
@@ -55,7 +67,35 @@ public class Staircase{
 		}
 		if (reversalCount == maxReversals) {
 			finished = true;
+			outputResult();
 		}
+	}
+
+	public string makeLabel(){
+		return "(" + (matte? "matte":"glossy") + "+baseAngle=" + baseAngle + ")";
+	}
+
+	public void outputResult ()
+	{
+		finalResult = 0;
+		for (int i = 0; i < numReversalsToUse; i++)
+		{
+			finalResult += Mathf.Log(reversals[maxReversals - i - 1], 2);
+		}
+		finalResult /= numReversalsToUse;
+		finalResult = Mathf.Pow(2, finalResult);
+		string label = makeLabel();
+		StreamWriter sw = File.AppendText("output/staircase-"+filename);
+		sw.Write(label+",");
+		for (int i = 0; i < currentStep; i++)
+		{
+			sw.Write("{0},", results[i]);
+		}
+		sw.Write("\n");
+		sw.Close();
+		sw = File.AppendText("output/result-"+filename);
+		sw.WriteLine(label+",{0}", finalResult);
+		sw.Close();
 	}
 }
 
@@ -80,6 +120,7 @@ public class PlayerScript : MonoBehaviour {
 	private Status status;
 	private System.DateTime surfaceStartTime;
 	private System.DateTime focusStartTime;
+	private string filename;
 
 	private bool finished = false;
 	private bool matte = true;
@@ -88,8 +129,17 @@ public class PlayerScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		filename = string.Format("{0}.csv", System.DateTime.Now.ToString("yyyy-MMM-dd-HH-mm-ss"));
+		System.IO.Directory.CreateDirectory("output/");
+		StreamWriter sw = File.AppendText("output/staircase-"+filename);
+		sw.WriteLine("The following is the staircase data.");
+		sw.Close();
+		sw = File.AppendText("output/result-"+filename);
+		sw.WriteLine("The following is the result data.");
+		sw.Close();
+
 		allStaircases = new Staircase[1];
-		allStaircases [0] = new Staircase (matte, -45, startingDiff);
+		allStaircases [0] = new Staircase (matte, -45, startingDiff, filename);
 		//allStaircases [1] = new Staircase (false, -45, startingDiff);
 		changeStaircase ();
 	}
