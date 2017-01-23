@@ -74,7 +74,7 @@ public class Staircase{
 	}
 
 	public string makeLabel(){
-		return "(" + (matte? "matte":"glossy") + "+baseAngle=" + baseAngle + ")";
+		return "(" + (matte? "matte":"glossy") + "+viewAngle=" + viewAngle + ")";
 	}
 
 	public void outputResult ()

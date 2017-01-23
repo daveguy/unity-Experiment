@@ -2,4 +2,4 @@ Attach light to surface at correct angle, according to Langer paper -- DONE
 Set a max angle so it doesn't go bonkers -- DONE
 Record and output results, make sure you use proper viewing angle, not world space angle. -- DONE
 
-Fix the text so it stays on the wall, not attached to the camera
+Fix the text so it stays on the wall, not attached to the camera -- should be done, need to test with the rift
