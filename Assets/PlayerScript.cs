@@ -8,6 +8,7 @@ public class Staircase{
 	public float currentDiff;
 	public float baseAngle;
 	public bool finished;
+	public float viewAngle;
 
 	enum LastFeedback {RIGHT, WRONG};
 	private LastFeedback lastFeedback;
@@ -24,9 +25,10 @@ public class Staircase{
 	static float upRate = 2.81f;
 	static float downRate = 0.8f;
 
-	public Staircase(bool matte, float baseAngle, float startingDiff, string filename){
+	public Staircase(bool matte, float viewAngle, float startingDiff, string filename){
 		this.matte = matte;
-		this.baseAngle = baseAngle;
+		this.viewAngle = viewAngle;
+		this.baseAngle = viewAngle - 90;
 		this.currentDiff = startingDiff;
 		this.filename = filename;
 		this.reversals = new float[maxReversals];
@@ -128,6 +130,7 @@ public class PlayerScript : MonoBehaviour {
 	private float startingDiff = 15;
 
 	// Use this for initialization
+	//Angle input should be view angle, not angle for unity
 	void Start () {
 		filename = string.Format("{0}.csv", System.DateTime.Now.ToString("yyyy-MMM-dd-HH-mm-ss"));
 		System.IO.Directory.CreateDirectory("output/");
@@ -139,8 +142,8 @@ public class PlayerScript : MonoBehaviour {
 		sw.Close();
 
 		allStaircases = new Staircase[1];
-		allStaircases [0] = new Staircase (matte, -45, startingDiff, filename);
-		//allStaircases [1] = new Staircase (false, -45, startingDiff);
+		allStaircases [0] = new Staircase (matte, 45, startingDiff, filename);
+		//allStaircases [1] = new Staircase (false, 45, startingDiff);
 		changeStaircase ();
 	}
 

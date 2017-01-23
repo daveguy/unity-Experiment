@@ -3038,7 +3038,7 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 2
-    m_MaxSize: 40
+    m_MaxSize: 121
     m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -3181,7 +3181,7 @@ Canvas:
   m_GameObject: {fileID: 753696963}
   m_Enabled: 1
   serializedVersion: 2
-  m_RenderMode: 1
+  m_RenderMode: 2
   m_Camera: {fileID: 958661194}
   m_PlaneDistance: 0.29
   m_PixelPerfect: 0
@@ -3199,8 +3199,8 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 753696963}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.29}
+  m_LocalScale: {x: 0.0010735423, y: 0.0010735423, z: 0.0010735423}
   m_Children:
   - {fileID: 734530571}
   - {fileID: 1895340652}
@@ -3210,8 +3210,8 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
+  m_SizeDelta: {x: 800, y: 540.26746}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &784077235
 Prefab:
   m_ObjectHideFlags: 0
