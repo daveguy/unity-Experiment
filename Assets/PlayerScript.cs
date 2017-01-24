@@ -142,7 +142,7 @@ public class PlayerScript : MonoBehaviour {
 		sw.Close();
 
 		allStaircases = new Staircase[1];
-		allStaircases [0] = new Staircase (matte, 45, startingDiff, filename);
+		allStaircases [0] = new Staircase (false, 45, startingDiff, filename);
 		//allStaircases [1] = new Staircase (false, 45, startingDiff);
 		changeStaircase ();
 	}
@@ -166,7 +166,7 @@ public class PlayerScript : MonoBehaviour {
 			status = Status.RESPONSE;
 			setWait ();
 		} else if(status == Status.RESPONSE){
-			if (Input.GetKeyDown (KeyCode.LeftControl) ) {
+			if (Input.GetKeyDown (KeyCode.LeftArrow) ) {
 				if (lastViewed == LastViewed.VARIABLE) {
 					currentStaircase.feedbackRight ();
 					changeStaircase ();
@@ -175,7 +175,7 @@ public class PlayerScript : MonoBehaviour {
 					changeStaircase ();
 				}
 			}
-			else if (Input.GetKeyDown (KeyCode.RightControl)) {
+			else if (Input.GetKeyDown (KeyCode.RightArrow)) {
 				if (lastViewed == LastViewed.CONSTANT) {
 					currentStaircase.feedbackRight ();
 					changeStaircase ();
@@ -259,7 +259,7 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	void setWait(){
-		mask.SetActive (true);
+		//mask.SetActive (true);
 		currentPlane.SetActive (false);
 		message.text = "Please make a selection\nleft control for the first surface\t right control for the second surface";
 	}

@@ -5,14 +5,21 @@ using System.IO;
 
 public class DaveTest : MonoBehaviour {
 
+	public GameObject cube;
+
+
 	// Use this for initialization
 	void Start ()
 	{
-		System.IO.Directory.CreateDirectory("Test/dave");
+		StartCoroutine(thing());
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	IEnumerator thing ()
+	{
+     	yield return new WaitForSecondsRealtime(1);
+		yield return StartCoroutine(cube.GetComponent<Fade>().Fade3D(cube.transform, 0, false, 0.25f));
+		yield return new WaitForSecondsRealtime(1);
+		yield return StartCoroutine(cube.GetComponent<Fade>().Fade3D(cube.transform, 1, false, 0.25f));
 		
 	}
 }
