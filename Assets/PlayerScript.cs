@@ -112,13 +112,14 @@ public class PlayerScript : MonoBehaviour {
 	public GameObject mask;
 	public Text message;
 	public Text errorMessage;
+	public float fadeTime;
 
 	private GameObject currentPlane;
 	private Staircase[] allStaircases;
 	private Staircase currentStaircase;
 	enum LastViewed {CONSTANT, VARIABLE};
 	private LastViewed lastViewed;
-	enum Status {VIEWFOCUS, FIRSTSURFACE, SECONDSURFACE, RESPONSE};
+	enum Status {VIEWFOCUS, FIRSTSURFACE, SECONDSURFACE, RESPONSE, FADE};
 	private Status status;
 	private System.DateTime surfaceStartTime;
 	private System.DateTime focusStartTime;
@@ -266,6 +267,7 @@ public class PlayerScript : MonoBehaviour {
 
 	void setFocus(){
 		focusPoint.SetActive (true);
+		//StartCoroutine(fade(0));
 		currentPlane.SetActive (false);
 		focusTime = true;
 		focusStartTime = System.DateTime.Now;
@@ -275,6 +277,12 @@ public class PlayerScript : MonoBehaviour {
 		mask.SetActive(true);
 		currentPlane.SetActive(false);
 		message.text = "The Expirement is finished. Thank you for participating";
+	}
+
+	IEnumerator fade (float targetAlpha)
+	{
+		print("fading");
+		yield return StartCoroutine(currentPlane.GetComponent<Fade>().Fade3D(currentPlane.transform, targetAlpha, 0.25f));
 	}
 
 	//reset surface before random rotation/translation

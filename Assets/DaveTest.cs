@@ -17,9 +17,9 @@ public class DaveTest : MonoBehaviour {
 	IEnumerator thing ()
 	{
      	yield return new WaitForSecondsRealtime(1);
-		yield return StartCoroutine(cube.GetComponent<Fade>().Fade3D(cube.transform, 0, false, 0.25f));
+		yield return StartCoroutine(cube.GetComponent<Fade>().Fade3D(cube.transform, 0, 0.25f));
 		yield return new WaitForSecondsRealtime(1);
-		yield return StartCoroutine(cube.GetComponent<Fade>().Fade3D(cube.transform, 1, false, 0.25f));
+		yield return StartCoroutine(cube.GetComponent<Fade>().Fade3D(cube.transform, 1, 0.25f));
 		
 	}
 }
