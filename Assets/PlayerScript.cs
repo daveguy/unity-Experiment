@@ -299,6 +299,6 @@ public class PlayerScript : MonoBehaviour {
 
 	void resetWorld(GameObject plane, float baseAngle){
 		plane.transform.eulerAngles = new Vector3(baseAngle, 0, 0);
-		plane.transform.position = new Vector3 (0, 0, 1.75f);
+		plane.transform.position = new Vector3 (0, 0, 0.75f);
 	}
 }

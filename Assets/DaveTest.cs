@@ -22,7 +22,6 @@ public class DaveTest : MonoBehaviour {
 		cube.GetComponent<Fade>().isFinished = false;
 		StartCoroutine (thing ());
 		while (!cube.GetComponent<Fade>().isFinished) {
-			print("waiting");
 			yield return null;
 		}
 		print("End");

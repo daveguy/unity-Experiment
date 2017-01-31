@@ -242,6 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d4a26d00dcb26f4f9c17ee31798f9d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFinished: 0
 --- !u!23 &101166323
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1189,14 +1190,14 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 285219286}
-  m_LocalRotation: {x: 0.91212016, y: 0, z: 0, w: 0.40992305}
+  m_LocalRotation: {x: 0.82609826, y: 0, z: 0, w: 0.56352615}
   m_LocalPosition: {x: 0, y: 0, z: 0.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 279105752}
   m_Father: {fileID: 1342803171}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 131.6, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 111.4, y: 0, z: 0}
 --- !u!1001 &289472618
 Prefab:
   m_ObjectHideFlags: 0
@@ -2856,6 +2857,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d4a26d00dcb26f4f9c17ee31798f9d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFinished: 0
 --- !u!23 &665907287
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3857,7 +3859,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &912937435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4822,7 +4824,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1175177403
 Transform:
   m_ObjectHideFlags: 0
@@ -4903,6 +4905,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d4a26d00dcb26f4f9c17ee31798f9d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFinished: 0
 --- !u!4 &1183306502 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 19526eecf380e2541bac077aaabe5c96, type: 3}
@@ -7510,7 +7513,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1980830845
 Transform:
   m_ObjectHideFlags: 0
@@ -7560,6 +7563,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d4a26d00dcb26f4f9c17ee31798f9d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFinished: 0
 --- !u!23 &1980830847
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8024,7 +8028,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2146437598
 Transform:
   m_ObjectHideFlags: 0
@@ -8050,7 +8054,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   planeMatte: {fileID: 665907284}
-  planeGlossy: {fileID: 1175177402}
+  planeGlossy: {fileID: 1980830844}
   focusPoint: {fileID: 786920046}
   surfaceLight: {fileID: 285219286}
   viewTime: 2
