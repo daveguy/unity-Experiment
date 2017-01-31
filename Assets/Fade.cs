@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Fade : MonoBehaviour {
 
+	public bool isFinished;
+
 	public  IEnumerator Fade3D (Transform t, float targetAlpha, float duration)
      {
          Renderer sr = t.GetComponent<Renderer> ();
@@ -18,6 +20,6 @@ public class Fade : MonoBehaviour {
              yield return null;
          }
 		 sr.sharedMaterial.color = new Color (sr.sharedMaterial.color.r, sr.sharedMaterial.color.g, sr.sharedMaterial.color.b, targetAlpha);
-         
+         isFinished = true;
      }
 }

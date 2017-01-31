@@ -6,12 +6,26 @@ using System.IO;
 public class DaveTest : MonoBehaviour {
 
 	public GameObject cube;
-
+	private bool fade;
+	bool first;
 
 	// Use this for initialization
 	void Start ()
 	{
-		StartCoroutine(thing());
+		StartCoroutine(thing1());
+	}
+
+
+	IEnumerator thing1 ()
+	{
+		print ("Start");
+		cube.GetComponent<Fade>().isFinished = false;
+		StartCoroutine (thing ());
+		while (!cube.GetComponent<Fade>().isFinished) {
+			print("waiting");
+			yield return null;
+		}
+		print("End");
 	}
 	
 	IEnumerator thing ()
@@ -20,6 +34,7 @@ public class DaveTest : MonoBehaviour {
 		yield return StartCoroutine(cube.GetComponent<Fade>().Fade3D(cube.transform, 0, 0.25f));
 		yield return new WaitForSecondsRealtime(1);
 		yield return StartCoroutine(cube.GetComponent<Fade>().Fade3D(cube.transform, 1, 0.25f));
+		//fade = false;
 		
 	}
 }

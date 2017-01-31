@@ -279,11 +279,11 @@ public class PlayerScript : MonoBehaviour {
 		message.text = "The Expirement is finished. Thank you for participating";
 	}
 
-	IEnumerator fade (float targetAlpha)
-	{
-		print("fading");
-		yield return StartCoroutine(currentPlane.GetComponent<Fade>().Fade3D(currentPlane.transform, targetAlpha, 0.25f));
-	}
+//	IEnumerator fade (float targetAlpha)
+//	{
+//		print("fading");
+//		yield return StartCoroutine(currentPlane.GetComponent<Fade>().Fade3D(currentPlane.transform, targetAlpha, 0.25f));
+//	}
 
 	//reset surface before random rotation/translation
 	void reset(GameObject plane, float baseAngle){
@@ -299,6 +299,6 @@ public class PlayerScript : MonoBehaviour {
 
 	void resetWorld(GameObject plane, float baseAngle){
 		plane.transform.eulerAngles = new Vector3(baseAngle, 0, 0);
-		plane.transform.position = new Vector3 (0, 0, 0.75f);
+		plane.transform.position = new Vector3 (0, 0, 1.75f);
 	}
 }
