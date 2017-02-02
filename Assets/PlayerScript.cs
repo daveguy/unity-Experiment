@@ -112,7 +112,7 @@ public class PlayerScript : MonoBehaviour {
 	public GameObject mask;
 	public Text message;
 	public Text errorMessage;
-	public float fadeTime;
+	public float fadeDuration;
 
 	private GameObject currentPlane;
 	private Staircase[] allStaircases;
@@ -142,6 +142,10 @@ public class PlayerScript : MonoBehaviour {
 		sw.WriteLine("The following is the result data.");
 		sw.Close();
 
+		Renderer ren = planeGlossy.GetComponent<Renderer> ();
+		ren.sharedMaterial.color = new Color(ren.sharedMaterial.color.r, ren.sharedMaterial.color.g, ren.sharedMaterial.color.b, 0f);
+		ren = planeMatte.GetComponent<Renderer> ();
+		ren.sharedMaterial.color = new Color(ren.sharedMaterial.color.r, ren.sharedMaterial.color.g, ren.sharedMaterial.color.b, 0f);
 		allStaircases = new Staircase[1];
 		allStaircases [0] = new Staircase (false, 45, startingDiff, filename);
 		//allStaircases [1] = new Staircase (false, 45, startingDiff);
@@ -235,7 +239,8 @@ public class PlayerScript : MonoBehaviour {
 	void set ()
 	{
 		focusPoint.SetActive (false);
-		currentPlane.SetActive (true);
+//		currentPlane.SetActive (true);
+
 		if (status == Status.FIRSTSURFACE) {// pick which pair to show first
 			lastViewed = Random.value > 0.5 ? LastViewed.CONSTANT : LastViewed.VARIABLE;
 		}
@@ -279,11 +284,14 @@ public class PlayerScript : MonoBehaviour {
 		message.text = "The Expirement is finished. Thank you for participating";
 	}
 
-//	IEnumerator fade (float targetAlpha)
-//	{
-//		print("fading");
-//		yield return StartCoroutine(currentPlane.GetComponent<Fade>().Fade3D(currentPlane.transform, targetAlpha, 0.25f));
-//	}
+	void fade (float targetAlpha)
+	{
+		currentPlane.GetComponent<Fade>().isFinished = false;
+		currentPlane.GetComponent<Fade> ().Fade3D (targetAlpha, fadeDuration);
+		while (!currentPlane.GetComponent<Fade> ().isFinished) {
+//			yield return null;
+		}
+	}
 
 	//reset surface before random rotation/translation
 	void reset(GameObject plane, float baseAngle){

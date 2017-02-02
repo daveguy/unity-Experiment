@@ -6,34 +6,39 @@ using System.IO;
 public class DaveTest : MonoBehaviour {
 
 	public GameObject cube;
-	private bool fade;
-	bool first;
+	bool done;
 
 	// Use this for initialization
 	void Start ()
 	{
-		StartCoroutine(thing1());
+		done = false;
+		StartCoroutine (thing());
+	}
+
+	void Update(){
+		if (done) {
+			done = false;
+			StartCoroutine (thing ());
+		}
 	}
 
 
 	IEnumerator thing1 ()
 	{
-		print ("Start");
 		cube.GetComponent<Fade>().isFinished = false;
 		StartCoroutine (thing ());
 		while (!cube.GetComponent<Fade>().isFinished) {
 			yield return null;
 		}
-		print("End");
 	}
 	
 	IEnumerator thing ()
 	{
      	yield return new WaitForSecondsRealtime(1);
-		yield return StartCoroutine(cube.GetComponent<Fade>().Fade3D(cube.transform, 0, 0.25f));
+		yield return StartCoroutine(cube.GetComponent<Fade>().Fade3D(0, 0.25f));
 		yield return new WaitForSecondsRealtime(1);
-		yield return StartCoroutine(cube.GetComponent<Fade>().Fade3D(cube.transform, 1, 0.25f));
-		//fade = false;
+		yield return StartCoroutine(cube.GetComponent<Fade>().Fade3D(1, 0.25f));
+		done = true;
 		
 	}
 }

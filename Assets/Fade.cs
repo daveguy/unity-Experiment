@@ -6,9 +6,9 @@ public class Fade : MonoBehaviour {
 
 	public bool isFinished;
 
-	public  IEnumerator Fade3D (Transform t, float targetAlpha, float duration)
+	public  IEnumerator Fade3D (float targetAlpha, float duration)
      {
-         Renderer sr = t.GetComponent<Renderer> ();
+		 Renderer sr = this.transform.GetComponent<Renderer> ();
          float diffAlpha = (targetAlpha - sr.sharedMaterial.color.a);
  
          float counter = 0;
