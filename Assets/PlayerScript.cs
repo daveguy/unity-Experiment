@@ -109,6 +109,7 @@ public class PlayerScript : MonoBehaviour {
 	public GameObject surfaceLight;
 	public float viewTime;
 	public float viewFocusTime;
+	public bool useFocusPoint;
 	public GameObject mask;
 	public Text message;
 	public Text errorMessage;
@@ -119,15 +120,15 @@ public class PlayerScript : MonoBehaviour {
 	private Staircase currentStaircase;
 	enum LastViewed {CONSTANT, VARIABLE};
 	private LastViewed lastViewed;
-	enum Status {VIEWFOCUS, FIRSTSURFACE, SECONDSURFACE, RESPONSE, FADE};
+	enum Status {VIEWFOCUS, FIRSTSURFACE, SECONDSURFACE, RESPONSE, SETFINISHED, FINISHED};
 	private Status status;
 	private System.DateTime surfaceStartTime;
 	private System.DateTime focusStartTime;
 	private string filename;
 
-	private bool finished = false;
-	private bool matte = true;
+//	private bool matte = true;
 	private bool focusTime;
+	private bool waitForFade;
 	private float startingDiff = 15;
 
 	// Use this for initialization
@@ -146,6 +147,7 @@ public class PlayerScript : MonoBehaviour {
 		ren.sharedMaterial.color = new Color(ren.sharedMaterial.color.r, ren.sharedMaterial.color.g, ren.sharedMaterial.color.b, 0f);
 		ren = planeMatte.GetComponent<Renderer> ();
 		ren.sharedMaterial.color = new Color(ren.sharedMaterial.color.r, ren.sharedMaterial.color.g, ren.sharedMaterial.color.b, 0f);
+
 		allStaircases = new Staircase[1];
 		allStaircases [0] = new Staircase (false, 45, startingDiff, filename);
 		//allStaircases [1] = new Staircase (false, 45, startingDiff);
@@ -155,21 +157,27 @@ public class PlayerScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
-		//errorMessage.text = status.ToString() + "\n" + focusTime.ToString() + "\n" + focusPoint.activeInHierarchy;
-		if (finished) {
-			setFinished ();
-		}
-		else if (focusTime){
+		if (status == Status.SETFINISHED) {
+			waitForFade = true;
+			StartCoroutine(setFinished ());
+		} else if(status == Status.FINISHED){
+			//do nothing, experiment is done
+		} else if (focusTime) {
 			if ((System.DateTime.Now - focusStartTime).TotalSeconds > viewFocusTime) {
 				focusTime = false;
-				set ();
+				waitForFade = true;
+				StartCoroutine(set ());
 			}
-		} else if (status ==Status.FIRSTSURFACE && (System.DateTime.Now - surfaceStartTime).TotalSeconds > viewTime) {
+		} else if(waitForFade){
+			//Do nothing
+		}else if (status ==Status.FIRSTSURFACE && (System.DateTime.Now - surfaceStartTime).TotalSeconds > viewTime) {
 			status = Status.SECONDSURFACE;
-			setFocus ();
+			waitForFade = true;
+			StartCoroutine(setFocus ());
 		} else if (status == Status.SECONDSURFACE && (System.DateTime.Now - surfaceStartTime).TotalSeconds > viewTime) {
 			status = Status.RESPONSE;
-			setWait ();
+			waitForFade = true;
+			StartCoroutine(setWait ());
 		} else if(status == Status.RESPONSE){
 			if (Input.GetKeyDown (KeyCode.LeftArrow) ) {
 				if (lastViewed == LastViewed.VARIABLE) {
@@ -197,7 +205,7 @@ public class PlayerScript : MonoBehaviour {
 		currentStaircase = getStaircase ();
 		if (currentStaircase == null) {
 			//we're done
-			finished = true;
+			status = Status.SETFINISHED;
 			return;
 		} else {
 			if (currentStaircase.matte) {
@@ -208,7 +216,8 @@ public class PlayerScript : MonoBehaviour {
 			mask.SetActive (false);
 			message.text = "";
 			status = Status.FIRSTSURFACE;
-			setFocus ();
+			waitForFade = true;
+			StartCoroutine(setFocus ());
 		}
 	}
 
@@ -236,10 +245,9 @@ public class PlayerScript : MonoBehaviour {
 		return hasRemaining;
 	}
 
-	void set ()
+	IEnumerator set ()
 	{
 		focusPoint.SetActive (false);
-//		currentPlane.SetActive (true);
 
 		if (status == Status.FIRSTSURFACE) {// pick which pair to show first
 			lastViewed = Random.value > 0.5 ? LastViewed.CONSTANT : LastViewed.VARIABLE;
@@ -261,36 +269,44 @@ public class PlayerScript : MonoBehaviour {
 			surfaceLight.transform.eulerAngles = new Vector3((90 + currentStaircase.baseAngle)*2, 0, 0);
 			lastViewed = LastViewed.CONSTANT;
 		}
+		currentPlane.SetActive (true);
+		yield return fade(1);
 		surfaceStartTime = System.DateTime.Now;
+		waitForFade = false;
 	}
 
-	void setWait(){
+	IEnumerator setWait(){
 		//mask.SetActive (true);
+		yield return fade(0);
 		currentPlane.SetActive (false);
 		message.text = "Please make a selection\nleft control for the first surface\t right control for the second surface";
+		waitForFade = false;
 	}
 
-	void setFocus(){
-		focusPoint.SetActive (true);
-		//StartCoroutine(fade(0));
+	IEnumerator setFocus ()
+	{
+		yield return StartCoroutine (fade (0));
 		currentPlane.SetActive (false);
+		if (useFocusPoint) {
+			focusPoint.SetActive (true);
+		}
 		focusTime = true;
 		focusStartTime = System.DateTime.Now;
+		waitForFade = false;
 	}
 
-	void setFinished (){
-		mask.SetActive(true);
+	IEnumerator setFinished (){
+		//mask.SetActive(true);
+		yield return fade(0);
 		currentPlane.SetActive(false);
 		message.text = "The Expirement is finished. Thank you for participating";
+		status = Status.FINISHED;
+		waitForFade = false;
 	}
 
-	void fade (float targetAlpha)
+	IEnumerator fade (float targetAlpha)
 	{
-		currentPlane.GetComponent<Fade>().isFinished = false;
-		currentPlane.GetComponent<Fade> ().Fade3D (targetAlpha, fadeDuration);
-		while (!currentPlane.GetComponent<Fade> ().isFinished) {
-//			yield return null;
-		}
+		yield return StartCoroutine(currentPlane.GetComponent<Fade> ().Fade3D (targetAlpha, fadeDuration));
 	}
 
 	//reset surface before random rotation/translation

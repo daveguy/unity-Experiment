@@ -3859,7 +3859,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &912937435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4824,7 +4824,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1175177403
 Transform:
   m_ObjectHideFlags: 0
@@ -8028,7 +8028,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2146437598
 Transform:
   m_ObjectHideFlags: 0
@@ -8058,11 +8058,12 @@ MonoBehaviour:
   focusPoint: {fileID: 786920046}
   surfaceLight: {fileID: 285219286}
   viewTime: 2
-  viewFocusTime: 0.5
+  viewFocusTime: 1
+  useFocusPoint: 0
   mask: {fileID: 44435839}
   message: {fileID: 734530572}
   errorMessage: {fileID: 1895340653}
-  fadeTime: 0.25
+  fadeDuration: 0.25
 --- !u!4 &2146992768 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 19526eecf380e2541bac077aaabe5c96, type: 3}
