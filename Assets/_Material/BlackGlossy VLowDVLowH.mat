@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: BlackGlossy 1
+  m_Name: BlackGlossy VLowDVLowH
   m_Shader: {fileID: 45, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: _ALPHABLEND_ON _EMISSION _NORMALMAP
   m_LightmapFlags: 1
@@ -19,7 +19,7 @@ Material:
     - first:
         name: _BumpMap
       second:
-        m_Texture: {fileID: 2800000, guid: cd37d9f715fb4554d973f01ec57b476c, type: 3}
+        m_Texture: {fileID: 2800000, guid: 48199c4db92e97342ae0c8e52b6a5a2b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - first:
@@ -94,13 +94,13 @@ Material:
       second: 1
     - first:
         name: _Glossiness
-      second: 0.893
+      second: 0.975
     - first:
         name: _GlossyReflections
       second: 1
     - first:
         name: _Metallic
-      second: 0.479
+      second: 0.307
     - first:
         name: _Mode
       second: 2
