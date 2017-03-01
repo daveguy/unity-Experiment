@@ -7,12 +7,11 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: blue 1
-  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: 4800000, guid: eed9dee626acda841b35669a0b839e88, type: 3}
   m_ShaderKeywords: _ALPHABLEND_ON _EMISSION
   m_LightmapFlags: 1
-  m_CustomRenderQueue: 3000
-  stringTagMap:
-    RenderType: Transparent
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
   m_SavedProperties:
     serializedVersion: 2
     m_TexEnvs:
@@ -88,13 +87,19 @@ Material:
       second: 1
     - first:
         name: _Glossiness
-      second: 0.5
+      second: 0.788
+    - first:
+        name: _GlossinessThreshold
+      second: 0
     - first:
         name: _GlossyReflections
       second: 1
     - first:
-        name: _Metallic
+        name: _HighlightThreshold
       second: 0
+    - first:
+        name: _Metallic
+      second: 0.123
     - first:
         name: _Mode
       second: 2
@@ -104,6 +109,9 @@ Material:
     - first:
         name: _Parallax
       second: 0.02
+    - first:
+        name: _Shininess
+      second: 13.8
     - first:
         name: _SmoothnessTextureChannel
       second: 0
@@ -122,7 +130,13 @@ Material:
     m_Colors:
     - first:
         name: _Color
-      second: {r: 0.071399465, g: 0, b: 0.872, a: 1}
+      second: {r: 0, g: 0, b: 0, a: 1}
     - first:
         name: _EmissionColor
       second: {r: 0, g: 0, b: 0, a: 1}
+    - first:
+        name: _SpecColor
+      second: {r: 1, g: 1, b: 1, a: 1}
+    - first:
+        name: _specColor
+      second: {r: 1, g: 1, b: 1, a: 1}
