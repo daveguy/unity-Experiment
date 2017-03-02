@@ -7,14 +7,20 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: blue 1
-  m_Shader: {fileID: 4800000, guid: eed9dee626acda841b35669a0b839e88, type: 3}
+  m_Shader: {fileID: 4800000, guid: 5f0d0cb7270c55749820e5ea6b7722fa, type: 3}
   m_ShaderKeywords: _ALPHABLEND_ON _EMISSION
   m_LightmapFlags: 1
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 3000
   stringTagMap: {}
   m_SavedProperties:
     serializedVersion: 2
     m_TexEnvs:
+    - first:
+        name: _Bump
+      second:
+        m_Texture: {fileID: 2800000, guid: 48199c4db92e97342ae0c8e52b6a5a2b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - first:
         name: _BumpMap
       second:
@@ -87,7 +93,7 @@ Material:
       second: 1
     - first:
         name: _Glossiness
-      second: 0.788
+      second: 0.808
     - first:
         name: _GlossinessThreshold
       second: 0
@@ -96,10 +102,10 @@ Material:
       second: 1
     - first:
         name: _HighlightThreshold
-      second: 0
+      second: 0.783
     - first:
         name: _Metallic
-      second: 0.123
+      second: 0.363
     - first:
         name: _Mode
       second: 2
