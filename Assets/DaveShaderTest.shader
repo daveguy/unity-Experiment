@@ -4,8 +4,8 @@
 Shader "DaveShaderTest" {
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
-		_GlossinessThreshold ("GThreshold", Range(0,1)) = 0.5
 		_specColor ("Specular Color", Color) = (1,1,1,1)
+		_GlossinessThreshold ("GThreshold", Range(0,1)) = 0.5
 		_Shininess ("shineness", Range(0,50)) = 10
 		_MainTex ("Texture", 2D) = "white" {}
 	}
