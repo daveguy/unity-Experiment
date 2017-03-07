@@ -6,7 +6,7 @@ Shader "Custom/DaveSpecularShader" {
 		_Specular ("Specular", Color) = (1,1,1,1)
 		_HighlightThreshold ("Highlight Threshold", Range(0,1)) = 0
 		_Bump ("Normal Map", 2D) = "bump" {}
-		_Glossiness ("Smoothness", Range(0,1)) = 0.5
+		_Glossiness ("Smoothness", Range(0,1.75)) = 0.5
 	}
 	SubShader {
 		Tags { "RenderType"="Fade"
@@ -59,12 +59,15 @@ Shader "Custom/DaveSpecularShader" {
 			fixed diff = max (0, dot (s.Normal, lightDir));
 			
 			float nh = max (0, dot (s.Normal, h));
-			float spec = pow (nh, s.Specular*128.0);
+			float spec = pow (nh, s.Specular*512);
 			
 			half4 c;
 			//c.rgb = s.Albedo * _LightColor0.rgb * diff + _LightColor0.rgb * _Specular.rgb * spec;
 			c.rgb = (s.Albedo*_LightColor0.rgb*diff + _LightColor0.rgb*spec)*atten;
 			c.a = s.Alpha;
+			if(sqrt(c.r*c.r+c.g*c.g+c.b*c.b) < _HighlightThreshold){
+				c.rgb = 0;
+			}
 
 			return c;
 		}

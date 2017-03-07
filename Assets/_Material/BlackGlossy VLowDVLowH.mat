@@ -99,13 +99,13 @@ Material:
       second: 1
     - first:
         name: _Glossiness
-      second: 1
+      second: 0.56
     - first:
         name: _GlossyReflections
       second: 0
     - first:
         name: _HighlightThreshold
-      second: 0
+      second: 0.123
     - first:
         name: _Metallic
       second: 0.595
