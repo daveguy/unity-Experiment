@@ -114,6 +114,7 @@ public class PlayerScript : MonoBehaviour {
 	public Text message;
 	public Text errorMessage;
 	public float fadeDuration;
+	public Transform InitCameraPos;
 
 	private GameObject currentPlane;
 	private Staircase[] allStaircases;
@@ -159,36 +160,35 @@ public class PlayerScript : MonoBehaviour {
 	{
 		if (status == Status.SETFINISHED) {
 			waitForFade = true;
-			StartCoroutine(setFinished ());
-		} else if(status == Status.FINISHED){
+			StartCoroutine (setFinished ());
+		} else if (status == Status.FINISHED) {
 			//do nothing, experiment is done
 		} else if (focusTime) {
 			if ((System.DateTime.Now - focusStartTime).TotalSeconds > viewFocusTime) {
 				focusTime = false;
 				waitForFade = true;
-				StartCoroutine(set ());
+				StartCoroutine (set ());
 			}
-		} else if(waitForFade){
+		} else if (waitForFade) {
 			//Do nothing
-		}else if (status ==Status.FIRSTSURFACE && (System.DateTime.Now - surfaceStartTime).TotalSeconds > viewTime) {
+		} else if (status == Status.FIRSTSURFACE && (System.DateTime.Now - surfaceStartTime).TotalSeconds > viewTime) {
 			status = Status.SECONDSURFACE;
 			waitForFade = true;
-			StartCoroutine(setFocus ());
+			StartCoroutine (setFocus ());
 		} else if (status == Status.SECONDSURFACE && (System.DateTime.Now - surfaceStartTime).TotalSeconds > viewTime) {
 			status = Status.RESPONSE;
 			waitForFade = true;
-			StartCoroutine(setWait ());
-		} else if(status == Status.RESPONSE){
-			if (Input.GetKeyDown (KeyCode.LeftArrow) ) {
+			StartCoroutine (setWait ());
+		} else if (status == Status.RESPONSE) {
+			if (Input.GetKeyDown (KeyCode.LeftArrow)) {
 				if (lastViewed == LastViewed.VARIABLE) {
 					currentStaircase.feedbackRight ();
 					changeStaircase ();
-				}else{
+				} else {
 					currentStaircase.feedbackWrong ();
 					changeStaircase ();
 				}
-			}
-			else if (Input.GetKeyDown (KeyCode.RightArrow)) {
+			} else if (Input.GetKeyDown (KeyCode.RightArrow)) {
 				if (lastViewed == LastViewed.CONSTANT) {
 					currentStaircase.feedbackRight ();
 					changeStaircase ();
@@ -197,6 +197,9 @@ public class PlayerScript : MonoBehaviour {
 					changeStaircase ();
 				}
 			}
+		}
+		if (currentStaircase.matte) {
+			currentPlane.getC
 		}
 	}
 
