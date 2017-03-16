@@ -1,6 +1,6 @@
 ﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 
-Shader "Custom/DaveSpecularShader" {
+Shader "Custom/SpecularShaderMatte" {
 	Properties {
 		_Color ("Albedo (RGB)", Color) = (0,0,0,1)
 		_Specular ("Specular", Color) = (1,1,1,1)
@@ -15,7 +15,7 @@ Shader "Custom/DaveSpecularShader" {
 		
 		CGPROGRAM
 		// Physically based Standard lighting model, and enable shadows on all light types
-		#pragma surface surf DavePhong 
+		#pragma surface surf DavePhong vertex:vert
 
 		// Use shader model 3.0 target, to get nicer looking lighting
 		#pragma target 3.0
@@ -25,6 +25,8 @@ Shader "Custom/DaveSpecularShader" {
 
 		struct Input {
 			float2 uv_BumpMap;
+			float3 worldPos;
+			float3 vertexPos;
 		};
 
 		struct SurfaceOutputDave {
@@ -34,11 +36,18 @@ Shader "Custom/DaveSpecularShader" {
 			half Specular;
 			fixed Gloss;
 			fixed Alpha;
+			float3 worldPos;
 		};
 
 		half _Glossiness;
 		fixed4 _Specular;
 		half _HighlightThreshold;
+		half3 _initCameraPos;
+
+		void vert(inout appdata_full v, out Input o){
+			UNITY_INITIALIZE_OUTPUT(Input, o);
+			o.vertexPos = v.vertex.xyz;
+		}
 
 		void surf (Input IN, inout SurfaceOutputDave o) {
 			// Albedo comes from a texture tinted by color
@@ -50,11 +59,14 @@ Shader "Custom/DaveSpecularShader" {
 			o.Gloss = 1;
 			o.Alpha = _Color.a;
 			o.Normal = UnpackNormal (tex2D (_Bump, IN.uv_BumpMap));
+			//o.worldPos = IN.vertexPos;
+			o.worldPos = IN.worldPos;
 		}
 
 		half4 LightingDavePhong (SurfaceOutputDave s, half3 viewDir, half3 lightDir, half atten)
 		{
-			half3 h = normalize (lightDir + viewDir);
+			half3 test = normalize(s.worldPos - half3(0.0,1.0,0.0));
+			half3 h = normalize (lightDir + test);
 			
 			fixed diff = max (0, dot (s.Normal, lightDir));
 			

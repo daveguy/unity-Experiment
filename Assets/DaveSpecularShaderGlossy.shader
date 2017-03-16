@@ -1,6 +1,6 @@
 ﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 
-Shader "Custom/DaveSpecularShader" {
+Shader "Custom/SpecularShaderGlossy" {
 	Properties {
 		_Color ("Albedo (RGB)", Color) = (0,0,0,1)
 		_Specular ("Specular", Color) = (1,1,1,1)

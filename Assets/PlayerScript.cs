@@ -199,7 +199,7 @@ public class PlayerScript : MonoBehaviour {
 			}
 		}
 		if (currentStaircase.matte) {
-			currentPlane.getC
+			
 		}
 	}
 
