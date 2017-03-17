@@ -11,6 +11,6 @@ public class renderControler : MonoBehaviour {
 	void Update () {
 		//Renderer rend = GetComponent<Renderer>();
 		//rend.material.shader = Shader.Find("SpecularShaderMatte");
-		GetComponent<Renderer>().material.SetVector("_initCameraPos", initCameraPos.position);
+		GetComponent<Renderer>().material.SetVector("_initCameraPos", new Vector4(initCameraPos.position.x, initCameraPos.position.y, initCameraPos.position.z, 1));
 	}
 }
