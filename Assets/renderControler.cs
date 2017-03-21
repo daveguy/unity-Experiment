@@ -9,8 +9,7 @@ public class renderControler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		//Renderer rend = GetComponent<Renderer>();
-		//rend.material.shader = Shader.Find("SpecularShaderMatte");
-		GetComponent<Renderer>().material.SetVector("_initCameraPos", new Vector4(initCameraPos.position.x, initCameraPos.position.y, initCameraPos.position.z, 1));
+		GetComponent<Renderer>().material.SetVector("_initCameraPos", new Vector4(initCameraPos.position.x, initCameraPos.position.y, initCameraPos.position.x));
+//		GetComponent<Renderer>().material.SetVector("_initCameraPos", new Vector4(0.0f, 1.0f, 0.0f, 1.0f));
 	}
 }
