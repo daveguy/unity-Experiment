@@ -7,15 +7,20 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: BlackGlossy 1
-  m_Shader: {fileID: 45, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: 4800000, guid: 5f0d0cb7270c55749820e5ea6b7722fa, type: 3}
   m_ShaderKeywords: _ALPHABLEND_ON _EMISSION _NORMALMAP
   m_LightmapFlags: 1
-  m_CustomRenderQueue: 3000
-  stringTagMap:
-    RenderType: Transparent
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
   m_SavedProperties:
     serializedVersion: 2
     m_TexEnvs:
+    - first:
+        name: _Bump
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - first:
         name: _BumpMap
       second:
@@ -94,10 +99,13 @@ Material:
       second: 1
     - first:
         name: _Glossiness
-      second: 0.893
+      second: 0.29
     - first:
         name: _GlossyReflections
       second: 1
+    - first:
+        name: _HighlightThreshold
+      second: 0.391
     - first:
         name: _Metallic
       second: 0.479
@@ -117,6 +125,9 @@ Material:
         name: _SpecularHighlights
       second: 1
     - first:
+        name: _SpecularPower
+      second: 0.5
+    - first:
         name: _SrcBlend
       second: 5
     - first:
@@ -134,4 +145,7 @@ Material:
       second: {r: 0, g: 0, b: 0, a: 1}
     - first:
         name: _SpecColor
+      second: {r: 1, g: 1, b: 1, a: 1}
+    - first:
+        name: _Specular
       second: {r: 1, g: 1, b: 1, a: 1}

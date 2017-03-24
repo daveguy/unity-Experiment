@@ -99,7 +99,7 @@ Material:
       second: 1
     - first:
         name: _Glossiness
-      second: 0.26
+      second: 0.11
     - first:
         name: _GlossinessThreshold
       second: 0.5
@@ -128,8 +128,14 @@ Material:
         name: _SmoothnessTextureChannel
       second: 0
     - first:
+        name: _Specular
+      second: 0.18
+    - first:
         name: _SpecularHighlights
       second: 1
+    - first:
+        name: _SpecularPower
+      second: 0.21
     - first:
         name: _SrcBlend
       second: 5
@@ -155,6 +161,9 @@ Material:
     - first:
         name: _Specular
       second: {r: 1, g: 1, b: 1, a: 1}
+    - first:
+        name: _initCameraPos
+      second: {r: 0, g: 1, b: 0, a: 0}
     - first:
         name: _specColor
       second: {r: 1, g: 1, b: 1, a: 1}

@@ -105,7 +105,7 @@ Material:
       second: 0
     - first:
         name: _HighlightThreshold
-      second: 0.123
+      second: 0
     - first:
         name: _Metallic
       second: 0.595
