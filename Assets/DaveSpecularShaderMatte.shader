@@ -26,6 +26,7 @@ Shader "Custom/SpecularShaderMatte" {
 			float2 uv_BumpMap;
 			float3 worldPos;
 			float4 uvGrab;
+			float4 initCameraPos;
 		};
 
 		struct SurfaceOutputDave {
@@ -36,7 +37,6 @@ Shader "Custom/SpecularShaderMatte" {
 			fixed SpecularPower;
 			fixed Alpha;
 			float3 worldPos;
-			float3 initCameraPos;
 			float4 uvGrabCol;
 		};
 
@@ -60,14 +60,14 @@ Shader "Custom/SpecularShaderMatte" {
 			o.SpecularPower = _SpecularPower;
 			o.Alpha = _Color.a;
 			o.Normal = UnpackNormal (tex2D (_Bump, IN.uv_BumpMap));
-			o.initCameraPos = _initCameraPos.xyz;
 			o.worldPos = IN.worldPos;
 			o.uvGrabCol = tex2Dproj(_GrabTexture, UNITY_PROJ_COORD(IN.uvGrab));
 		}
 
 		half4 LightingDavePhong (SurfaceOutputDave s,  half3 lightDir, half3 viewDir, half atten)
 		{
-			half3 h = normalize(lightDir + normalize(half3(0.0,1.0,0.0) - s.worldPos));
+//			half3 h = normalize(lightDir + normalize(half3(0.0,0.0,0.0) - s.worldPos));
+			half3 h = normalize(lightDir + normalize(_initCameraPos.xyz - s.worldPos));
 			fixed diff = max (0, dot (s.Normal, lightDir));
 			
 			float nh = max (0, dot (s.Normal, h));
@@ -77,10 +77,9 @@ Shader "Custom/SpecularShaderMatte" {
 			objectCol = (s.Albedo*_LightColor0.rgb*diff + _LightColor0.rgb*s.Specular*spec)*atten;
 			half3 backCol = s.uvGrabCol.rgb;
 			half4 c;
+//			half3 test = lerp(backCol, objectCol, s.Alpha);
 			half3 test = lerp(half3(0.0,0.0,0.0), objectCol, s.Alpha);
 			c.rgb = test;
-//			c.rgb = (s.Albedo*_LightColor0.rgb*diff + _LightColor0.rgb*s.Specular*spec)*atten;
-//			c.rgb = half3(test.x, test.y, test.z);
 			c.a = s.Alpha;
 			if(sqrt(c.r*c.r+c.g*c.g+c.b*c.b) < _HighlightThreshold){
 				c.rgb = 0;
