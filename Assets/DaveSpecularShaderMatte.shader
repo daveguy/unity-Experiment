@@ -14,9 +14,10 @@ Shader "Custom/SpecularShaderMatte" {
 	SubShader {
 		Tags { "RenderType"="Fade"
 			   "Queue" = "Transparent" }
-//		GrabPass{"_GrabTexture"}
-		LOD 200
-		
+		GrabPass{"_GrabTexture"}
+//		LOD 200
+
+
 		CGPROGRAM
 		// Physically based Standard lighting model, and enable shadows on all light types
 		#pragma surface surf DavePhong 
@@ -61,12 +62,13 @@ Shader "Custom/SpecularShaderMatte" {
 			o.Alpha = _Color.a;
 			o.Normal = UnpackNormal (tex2D (_Bump, IN.uv_BumpMap));
 			o.worldPos = IN.worldPos;
+			float4 objPos = mul(unity_WorldToObject, IN.worldPos);
+			o.uvGrab = ComputeGrabScreenPos(UnityObjectToClipPos(objPos));
 //			o.AlbedoTex = tex2D(_mainTex, IN.uv_MainTex).rgb;
 		}
 
 		half4 LightingDavePhong (SurfaceOutputDave s,  half3 lightDir, half3 viewDir, half atten)
 		{
-//			half3 h = normalize(lightDir + normalize(half3(0.0,0.0,0.0) - s.worldPos));
 			half3 h = normalize(lightDir + normalize(_initCameraPos.xyz - s.worldPos));
 			fixed diff = max (0, dot (s.Normal, lightDir));
 			
@@ -76,7 +78,6 @@ Shader "Custom/SpecularShaderMatte" {
 			half3 objectCol;
 //			s.Albedo *= s.AlbedoTex;
 			objectCol = (s.Albedo*_LightColor0.rgb*diff + _LightColor0.rgb*s.Specular*spec)*atten;
-//			objectCol = (s.AlbedoTex*_LightColor0.rgb*diff + _LightColor0.rgb*s.Specular*spec)*atten;
 
 			//All of my various different testing options
 			if(sqrt(objectCol.r*objectCol.r+objectCol.g*objectCol.g+objectCol.b*objectCol.b) < _HighlightThreshold){
@@ -89,8 +90,9 @@ Shader "Custom/SpecularShaderMatte" {
 				objectCol = half3(0.2,0.2,0.2) - objectCol;
 			}
 			half4 c;
-			half3 test = lerp(half3(0.0,0.0,0.0), objectCol, s.Alpha);
-			c.rgb = test;
+//			half3 test = lerp(half3(0.0,0.0,0.0), objectCol, s.Alpha);
+//			c.rgb = test;
+			c.rgb = objectCol;
 			c.a = s.Alpha;
 
 

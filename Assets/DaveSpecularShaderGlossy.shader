@@ -41,11 +41,7 @@ Shader "Custom/SpecularShaderGlossy" {
 		half _HighlightThreshold;
 
 		void surf (Input IN, inout SurfaceOutputDave o) {
-			// Albedo comes from a texture tinted by color
-			//fixed4 c = _MainTex.rgb;
 			o.Albedo = _Color.rgb;
-			//o.Specular = _Specular
-			// Metallic and smoothness come from slider variables
 			o.Specular = _Glossiness;
 			o.Gloss = 1;
 			o.Alpha = _Color.a;

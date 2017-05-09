@@ -8,7 +8,7 @@ Material:
   m_PrefabInternal: {fileID: 0}
   m_Name: BlackGlossy VLowDVLowH
   m_Shader: {fileID: 4800000, guid: 5f0d0cb7270c55749820e5ea6b7722fa, type: 3}
-  m_ShaderKeywords: _ALPHABLEND_ON _EMISSION _GLOSSYREFLECTIONS_OFF _NORMALMAP
+  m_ShaderKeywords: _ALPHAPREMULTIPLY_ON _EMISSION _GLOSSYREFLECTIONS_OFF _NORMALMAP
   m_LightmapFlags: 1
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -99,7 +99,7 @@ Material:
       second: 1
     - first:
         name: _Glossiness
-      second: 0.56
+      second: 0.3
     - first:
         name: _GlossyReflections
       second: 0
@@ -111,7 +111,7 @@ Material:
       second: 0.595
     - first:
         name: _Mode
-      second: 2
+      second: 3
     - first:
         name: _OcclusionStrength
       second: 1
@@ -129,7 +129,7 @@ Material:
       second: 1
     - first:
         name: _SrcBlend
-      second: 5
+      second: 1
     - first:
         name: _UVSec
       second: 0
@@ -139,7 +139,7 @@ Material:
     m_Colors:
     - first:
         name: _Color
-      second: {r: 0.16176468, g: 0.16176468, b: 0.16176468, a: 1}
+      second: {r: 0.25, g: 0.25, b: 0.25, a: 1}
     - first:
         name: _EmissionColor
       second: {r: 0, g: 0, b: 0, a: 1}
