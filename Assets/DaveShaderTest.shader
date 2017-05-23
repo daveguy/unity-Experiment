@@ -1,4 +1,6 @@
-﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 // Upgrade NOTE: replaced '_World2Object' with 'unity_WorldToObject'
 
 Shader "DaveShaderTest" {
@@ -45,7 +47,7 @@ Shader "DaveShaderTest" {
 				float3 specularReflection = atten*_LightColor0.rgb*_specColor.rgb 
 					* pow(max(0.0, dot(reflect(-lightDirection, normalDirection), viewDirection)), _Shininess);
 				output.col = float4(specularReflection, input.vertex.a);
-				output.pos = mul(UNITY_MATRIX_MVP, input.vertex);
+				output.pos = UnityObjectToClipPos(input.vertex);
 				return output;
 			}
 

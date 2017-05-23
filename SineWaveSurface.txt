@@ -1,17 +1,1 @@
-sin(2*x + y) + sin(4*x + 3*y) + sin(8*x + 8*y) + sin(3*x + 9*y)
-
-fx = Sin[{x, y}.{Round[RandomReal[]*10], Round[RandomReal[]*10]}] + 
-  Sin[{x, y}.{Round[RandomReal[]*10], Round[RandomReal[]*10]}] + 
-  Sin[{x, y}.{Round[RandomReal[]*10], Round[RandomReal[]*10]}] + 
-  Sin[{x, y}.{Round[RandomReal[]*10], Round[RandomReal[]*10]}]
-
-sin(2*x) + sin(y) + sin(4*x) + sin(3*y) + sin(8*x) + sin(8*y) + sin(3*x) + sin(9*y)
-
-sin(2*x) + sin(y) + sin(4*x) + sin(3*y) + sin(8*x + 8*y) + sin(3*x + 9*y)
-
-0.05*(sin(6.7874*x + 7.0605*y) + sin(4.9483*x + 7.6552*y) + sin(8*x + 8*y) + sin(3*x + 9*y) + sin(5*x + 7*y) + sin(4*x + 9*y) + sin(3*x + 7*y) + sin(7*x + 4*y) + sin(2*x + y) + sin(4*x + 7*y) + sin(5*x + 3*y) + sin(8*x + 4*y))
-
-sin(7*x + 8*y) + sin(7* + y) + sin(2*x + 5*y) + sin(6*x + 1*y) + sin(6*x + 1*y) + sin(1*x + 2*y) + sin(1*x + 8*y) + sin(4*x + 2*y) + sin(9*x + 8*y) + sin(3*x + 2*y) + sin(5*x + 9*y) + sin(2*x + 3*y) + sin(7*x + 1*y) + sin(2*x + 2*y) + sin(5*x + 6*y) + sin(6*x + 4*y)
-
-
-sin(8*x + 6*y) + sin(5*x + 2*y) + sin(5*x + 6*y) + sin(9*x + 6*y) + sin(2*x + 7*y) + sin(7*x + 4*y) + sin(7*x + 0*y) + sin(3*x + 2*y) + sin(5*x + 9*y) + sin(0*x + 1*y) + sin(0*x + 8*y) + sin(5*x + 5*y) + sin(7*x + 9*y) + sin(9*x + 0*y) + sin(1*x + 4*y) + sin(5*x + 1*y) + sin(4*x + 9*y) + sin(0*x + 0*y) + sin(3*x + 7*y) + sin(1*x + 8*y) + sin(7*x + 8*y) + sin(3*x + 0*y) + sin(5*x + 3*y) + sin(1*x + 2*y)
+0.05*sin(8*x) + 0.05*sin(8*y)
