@@ -52,7 +52,7 @@ Shader "Custom/SpecularShaderGlossy" {
 			o.Normal = UnpackNormal (tex2D (_Bump, IN.uv_BumpMap));
 		}
 
-		half4 LightingDavePhong (SurfaceOutputDave s, half3 viewDir, half3 lightDir, half atten)
+		half4 LightingDavePhong (SurfaceOutputDave s, half3 lightDir, half3 viewDir, half atten)
 		{
 			half3 h = normalize (lightDir + viewDir);
 			

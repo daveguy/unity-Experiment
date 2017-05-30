@@ -5,11 +5,11 @@ Shader "Custom/SpecularShaderMatte" {
 		_Color ("Albedo (RGB)", Color) = (0,0,0,1)
 		_Specular ("Specular", Color) = (1,1,1,1)
 		_HighlightThreshold ("Highlight Threshold", Range(0,1)) = 0
+		_Bump ("Normal Map", 2D) = "bump" {}
+		_SpecularPower ("Smoothness", Range(0,1.75)) = 0.5
 		_WhiteThreshold ("white threshold", Range(0.001, 1)) = 1
 		_reverseColors("reverse colors", Range(0,1)) = 1
 		_mainTex("texture", 2D) = "white" {}
-		_Bump ("Normal Map", 2D) = "bump" {}
-		_SpecularPower ("SpecularPower", Range(0,1.75)) = 0.5
 	}
 	SubShader {
 		Tags { "RenderType"="Fade"
@@ -28,7 +28,7 @@ Shader "Custom/SpecularShaderMatte" {
 			float2 uv_BumpMap;
 			float2 uv_MainTex;
 			float3 worldPos;
-			float4 uvGrab;
+//			float4 uvGrab;
 			float4 initCameraPos;
 		};
 
@@ -75,7 +75,7 @@ Shader "Custom/SpecularShaderMatte" {
 
 			half3 objectCol;
 //			s.Albedo *= s.AlbedoTex;
-			objectCol = (s.Albedo*_LightColor0.rgb*diff + _LightColor0.rgb*s.Specular*spec)*atten;
+			objectCol = (s.Albedo*_LightColor0.rgb*diff + _LightColor0.rgb*spec)*atten;
 //			objectCol = (s.AlbedoTex*_LightColor0.rgb*diff + _LightColor0.rgb*s.Specular*spec)*atten;
 
 			//All of my various different testing options
