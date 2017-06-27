@@ -62,8 +62,10 @@ Shader "Custom/SpecularShaderGlossy" {
 			float spec = pow (nh, s.Specular*512);
 			
 			half4 c;
+			half3 objectCol;
 			//c.rgb = s.Albedo * _LightColor0.rgb * diff + _LightColor0.rgb * _Specular.rgb * spec;
-			c.rgb = (s.Albedo*_LightColor0.rgb*diff + _LightColor0.rgb*spec)*atten;
+			objectCol = (s.Albedo*_LightColor0.rgb*diff + _LightColor0.rgb*spec)*atten;
+			c.rgb = lerp(half3(0.0,0.0,0.0), objectCol, s.Alpha);
 			c.a = s.Alpha;
 			if(sqrt(c.r*c.r+c.g*c.g+c.b*c.b) < _HighlightThreshold){
 				c.rgb = 0;

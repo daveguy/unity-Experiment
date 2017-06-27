@@ -23,15 +23,6 @@ for size 2 ~1 million verts seems to work, another subdivide starts to have arti
 for size 3 ~ 279 000 verts, displace strength 0.075. Bake with 0 margin, 16000 max verts
 
 QUESTIONS:
-For a pair of surfaces do we show the same surface, at different angles? meaning no rotation or translation, just angle change. Or do we show new surface (new will be the same model, but rotated & translated slightly)
+-Do we show a finite, pre-determined number of surfaces. Or have some sort of end condition?
 
-
-not surehow to transition, mask? black screen?
-
-Questions for Mike:
-Knill puts a reference dot, inbetween surfaces, at the point of fixation (center where distance is what you want), should we do that? YES
-
-How do you step? fixed amount or ratio? Read "Forced-choice staircases with fixed step sizes: asymptotic and
-small-sample properties" they have some advice
-
-With Haomin you used one-up/one-down with different step sizes, should we do that?
+-Do we limit how long users view the surface/have to answer?

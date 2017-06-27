@@ -89,8 +89,8 @@ Shader "Custom/SpecularShaderMatte" {
 				objectCol = half3(0.2,0.2,0.2) - objectCol;
 			}
 			half4 c;
-			half3 test = lerp(half3(0.0,0.0,0.0), objectCol, s.Alpha);
-			c.rgb = test;
+//			half3 test = lerp(half3(0.0,0.0,0.0), objectCol, s.Alpha);
+			c.rgb = lerp(half3(0.0,0.0,0.0), objectCol, s.Alpha);
 			c.a = s.Alpha;
 
 

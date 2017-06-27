@@ -55,13 +55,14 @@ public class answerRecorder{
 public class DemoScript : MonoBehaviour {
 
 	public GameObject[] surfaces;
-
+	public float fadeDuration;
 
 	private int surfaceIndex;
 	private GameObject currentSurface;
 	private answerRecorder recorder;
 	private int numSamples = 10;
 	private string filename;
+	private bool waitForFade;
 
 	void Start () {
 		filename = string.Format("{0}.csv", System.DateTime.Now.ToString("yyyy-MMM-dd-HH-mm-ss"));
@@ -79,15 +80,26 @@ public class DemoScript : MonoBehaviour {
 	}
 	
 
-	void Update () {
-		if (!recorder.isFinished) {
-			if (Input.GetKeyDown (KeyCode.Space)) {
+	void Update ()
+	{
+		if (waitForFade) {
+			//do nothing
+		}
+		else if (!recorder.isFinished) {
+			if (Input.GetKeyDown (KeyCode.LeftControl)) {
 				if (currentSurface.transform.Find ("vertical")) {
-					recorder.recordResponses ("vertical", "userResponse");
+					recorder.recordResponses ("vertical", "horizontal");
 				} else {
-					recorder.recordResponses ("horizontal", "userResponse");
+					recorder.recordResponses ("horizontal", "horizontal");
 				}
-				getNextSurface ();
+				StartCoroutine(getNextSurface ());
+			} else if (Input.GetKeyDown (KeyCode.RightControl)) {
+				if (currentSurface.transform.Find ("vertical")) {
+					recorder.recordResponses ("vertical", "vertical");
+				} else {
+					recorder.recordResponses ("horizontal", "vertical");
+				}
+				StartCoroutine(getNextSurface ());
 			}
 		} else {
 			currentSurface.SetActive (false);
@@ -96,20 +108,27 @@ public class DemoScript : MonoBehaviour {
 
 	}
 
-	void getNextSurface(){
+
+	IEnumerator getNextSurface(){
+		waitForFade = true;
+		yield return fade(0);
 		currentSurface.SetActive (false);
 		surfaceIndex = (surfaceIndex + 1) % surfaces.Length;
 		currentSurface = surfaces [surfaceIndex];
 		currentSurface.SetActive (true);
-//		if (currentSurface.transform.Find("vertical")) {
-//			print ("Text exists");
-//		} else {
-//			print ("Text does not exist");
-//		}
+		yield return fade(1);
+		waitForFade = false;
+	}
+
+	IEnumerator fade (float targetAlpha)
+	{
+		yield return StartCoroutine(currentSurface.GetComponent<Fade> ().Fade3D (targetAlpha, fadeDuration));
 	}
 
 	void deactivateAll(){
 		foreach (GameObject g in surfaces) {
+			Renderer ren = g.GetComponent<Renderer> ();
+			ren.sharedMaterial.color = new Color(ren.sharedMaterial.color.r, ren.sharedMaterial.color.g, ren.sharedMaterial.color.b, 0f);
 			g.SetActive (false);
 		}
 			
