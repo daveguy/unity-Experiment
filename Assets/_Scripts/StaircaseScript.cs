@@ -101,7 +101,7 @@ public class Staircase{
 	}
 }
 
-public class PlayerScript : MonoBehaviour {
+public class StaircaseScript : MonoBehaviour {
 
 	public GameObject planeMatte;
 	public GameObject planeGlossy;
