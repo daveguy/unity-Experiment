@@ -54,10 +54,11 @@ public class answerRecorder{
 
 public class DemoScript : MonoBehaviour {
 
-	public GameObject[] surfaces;
-	public float fadeDuration;
+	public GameObject lambertianSurfaceVertical;
+	public GameObject lambertianSurfaceHorizontal;
+	public float[] distances;
+//	public float fadeDuration;
 
-	private int surfaceIndex;
 	private GameObject currentSurface;
 	private answerRecorder recorder;
 	private int numSamples = 10;
@@ -72,11 +73,9 @@ public class DemoScript : MonoBehaviour {
 		sw.Close();
 
 		deactivateAll ();
-		surfaceIndex = 0;
-		currentSurface = surfaces [surfaceIndex];
-		currentSurface.SetActive (true);
+		getNextSurface();
 		recorder = new answerRecorder (numSamples, filename);
-
+		waitForFade = false;
 	}
 	
 
@@ -92,14 +91,14 @@ public class DemoScript : MonoBehaviour {
 				} else {
 					recorder.recordResponses ("horizontal", "horizontal");
 				}
-				StartCoroutine(getNextSurface ());
+				getNextSurface ();
 			} else if (Input.GetKeyDown (KeyCode.RightControl)) {
 				if (currentSurface.transform.Find ("vertical")) {
 					recorder.recordResponses ("vertical", "vertical");
 				} else {
 					recorder.recordResponses ("horizontal", "vertical");
 				}
-				StartCoroutine(getNextSurface ());
+				getNextSurface ();
 			}
 		} else {
 			currentSurface.SetActive (false);
@@ -109,28 +108,27 @@ public class DemoScript : MonoBehaviour {
 	}
 
 
-	IEnumerator getNextSurface(){
-		waitForFade = true;
-		yield return fade(0);
-		currentSurface.SetActive (false);
-		surfaceIndex = (surfaceIndex + 1) % surfaces.Length;
-		currentSurface = surfaces [surfaceIndex];
+	void getNextSurface(){
+//		waitForFade = true;
+//		yield return fade(0);
+		currentSurface = lambertianSurfaceVertical;
 		currentSurface.SetActive (true);
-		yield return fade(1);
-		waitForFade = false;
+//		yield return fade(1);
+//		waitForFade = false;
 	}
 
-	IEnumerator fade (float targetAlpha)
-	{
-		yield return StartCoroutine(currentSurface.GetComponent<Fade> ().Fade3D (targetAlpha, fadeDuration));
-	}
+//	IEnumerator fade (float targetAlpha)
+//	{
+//		yield return StartCoroutine(currentSurface.GetComponent<Fade> ().Fade3D (targetAlpha, fadeDuration));
+//	}
 
 	void deactivateAll(){
-		foreach (GameObject g in surfaces) {
-			Renderer ren = g.GetComponent<Renderer> ();
-			ren.sharedMaterial.color = new Color(ren.sharedMaterial.color.r, ren.sharedMaterial.color.g, ren.sharedMaterial.color.b, 0f);
-			g.SetActive (false);
-		}
-			
+	
+		lambertianSurfaceVertical.SetActive (false);
+		lambertianSurfaceHorizontal.SetActive (false);
+//		Renderer ren = g.GetComponent<Renderer> ();
+//		ren.sharedMaterial.color = new Color(ren.sharedMaterial.color.r, ren.sharedMaterial.color.g, ren.sharedMaterial.color.b, 0f);
+
+		
 	}
 }
