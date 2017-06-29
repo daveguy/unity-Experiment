@@ -60,10 +60,17 @@ public class DemoScript : MonoBehaviour {
 //	public float fadeDuration;
 
 	private GameObject currentSurface;
+	private int currentDistanceIndex;
 	private answerRecorder recorder;
 	private int numSamples = 10;
 	private string filename;
 	private bool waitForFade;
+
+	//variables for scaling
+	private Vector3 initScale;
+	private float initHaloScale;
+	private float initLightScale;
+	private float initZDist;
 
 	void Start () {
 		filename = string.Format("{0}.csv", System.DateTime.Now.ToString("yyyy-MMM-dd-HH-mm-ss"));
@@ -76,6 +83,13 @@ public class DemoScript : MonoBehaviour {
 		getNextSurface();
 		recorder = new answerRecorder (numSamples, filename);
 		waitForFade = false;
+		currentDistanceIndex = distances.Length - 1;
+
+		//set initial values for scaling
+		initScale = currentSurface.transform.localScale;
+		initZDist = currentSurface.transform.position.z;
+		initLightScale = currentSurface.transform.Find ("lights/Spotlight").GetComponent<Light> ().range;
+		initHaloScale = currentSurface.transform.Find ("lights/Spotlight/halo").GetComponent<Light> ().range;
 	}
 	
 
@@ -99,12 +113,29 @@ public class DemoScript : MonoBehaviour {
 					recorder.recordResponses ("horizontal", "vertical");
 				}
 				getNextSurface ();
+			} else if (Input.GetKeyDown (KeyCode.Space)) {
+				scale ();
 			}
 		} else {
 			currentSurface.SetActive (false);
 			//do nothing for now, should have a message to say we're done.
 		}
 
+	}
+
+	void scale(){
+		currentDistanceIndex = (currentDistanceIndex + 1) % distances.Length;
+		float scale = distances [currentDistanceIndex] / initZDist;
+		currentSurface.transform.position = new Vector3 (currentSurface.transform.position.x, 1-scale, distances [currentDistanceIndex]);
+		currentSurface.transform.localScale = new Vector3 (initScale.x * scale, initScale.y * scale, initScale.z * scale);
+		Light[] lights = currentSurface.transform.Find ("lights").GetComponentsInChildren<Light> ();
+		foreach (Light l in lights) {
+			if (l.name.Equals ("halo")) {
+				l.range = initHaloScale * scale;
+			} else {
+				l.range = initLightScale * scale;
+			}
+		}
 	}
 
 
