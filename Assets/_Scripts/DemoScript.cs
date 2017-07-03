@@ -5,46 +5,39 @@ using UnityEngine.UI;
 using System.IO;
 
 public class answerRecorder{
-	public bool isFinished;
-
 	private string[] responses;
-	private string[] truths;
+	private string[] distances;
 	private int currentSample;
 	private string filename;
 
 	public answerRecorder(int numberOfSamples, string filename){
 		responses = new string[numberOfSamples];
-		truths = new string[numberOfSamples];
+		distances = new string[numberOfSamples];
 		currentSample = 0;
-		isFinished = false;
 		this.filename = filename;
 	}
 
-	public void recordResponses(string truth, string response){
+	public void recordResponses(string distance, string response){
 		responses [currentSample] = response;
-		truths [currentSample] = truth;
+		distances [currentSample] = distance;
 		currentSample++;
-		if (currentSample == responses.Length) {
-			isFinished = true;
-//			outputResult ();
-		}
 	}
 
 	public void outputResult ()
 	{
 		StreamWriter sw = File.AppendText("output/demo-"+filename);
-		sw.Write ("USERRESPONSES:,");
-		for (int i = 0; i < responses.Length; i++) {
-			sw.Write (responses [i]);
-			if (i < responses.Length - 1) {
+		sw.Write("DISTANCE: ,");
+		for (int i = 0; i < distances.Length; i++) {
+			sw.Write (distances [i]);
+			if (i < distances.Length - 1) {
 				sw.Write (",");
 			}
 		}
 		sw.Write("\n");
-		sw.Write("TRUTHS: ,");
-		for (int i = 0; i < truths.Length; i++) {
-			sw.Write (truths [i]);
-			if (i < truths.Length - 1) {
+		sw.Write ("USERRESPONSE:,");
+		for (int i = 0; i < responses.Length; i++) {
+			sw.Write (responses [i]);
+			if (i < responses.Length - 1) {
 				sw.Write (",");
 			}
 		}
@@ -56,17 +49,18 @@ public class DemoScript : MonoBehaviour {
 
 	public GameObject surfaceHorizontal;
 	public GameObject surfaceVertical;
-	public float[] distances;
+	public int numSamples;//this is number of samples at each distance in distances
 	public Transform initCameraPos;
 	public float maxPermX;
 	public float maxPermZ;
-//	public float fadeDuration;
+	public float[] distances;
 
+	private int[] distanceCounts;
 	private GameObject currentSurface;
 	private int currentDistanceIndex;
 	private answerRecorder recorder;
-	private int numSamples = 10;
 	private string filename;
+	private bool isFinished;
 
 	//variables for scaling
 	private Vector3 initScale;
@@ -75,59 +69,58 @@ public class DemoScript : MonoBehaviour {
 	private float initZDist;
 
 	void Start () {
+		//wriute headers to output
 		filename = string.Format("{0}.csv", System.DateTime.Now.ToString("yyyy-MMM-dd-HH-mm-ss"));
-//		System.IO.Directory.CreateDirectory("output/");
-//		StreamWriter sw = File.AppendText("output/demo-"+filename);
-//		sw.WriteLine("The following is the demo results");
-//		sw.Close();
-
-		deactivateAll ();
-		resetLights (surfaceVertical);
-		permuteLights (surfaceVertical);
-		resetLights (surfaceHorizontal);
-		permuteLights (surfaceHorizontal);
-		currentSurface = surfaceVertical;
-		currentSurface.SetActive (true); //change this for a method to randomly pick a surface
-		recorder = new answerRecorder (numSamples, filename);
-		currentDistanceIndex = 0;
+		System.IO.Directory.CreateDirectory("output/");
+		StreamWriter sw = File.AppendText("output/demo-"+filename);
+		sw.WriteLine("The following is the demo results");
+		sw.Close();
 
 		//set initial values for scaling
-		initScale = currentSurface.transform.localScale;
-		initZDist = currentSurface.transform.position.z;
-		initLightScale = currentSurface.transform.Find ("lights/Spotlight").GetComponent<Light> ().range;
-		initHaloScale = currentSurface.transform.Find ("lights/Spotlight/halo").GetComponent<Light> ().range;
+		initScale = surfaceVertical.transform.localScale;
+		initZDist = surfaceVertical.transform.position.z;
+		initLightScale = surfaceVertical.transform.Find ("lights/Spotlight").GetComponent<Light> ().range;
+		initHaloScale = surfaceVertical.transform.Find ("lights/Spotlight/halo").GetComponent<Light> ().range;
+
+		deactivateAll ();
+		recorder = new answerRecorder (numSamples*distances.Length, filename);
+		distanceCounts = new int[distances.Length];
+		scale ();
+		currentSurface = surfaceVertical;
+		getNextSurface();
 	}
 	
 
 	void Update ()
 	{
-		if (!recorder.isFinished) {
-			if (Input.GetKeyDown (KeyCode.LeftControl)) {
-				if (currentSurface.transform.Find ("vertical")) {
-					recorder.recordResponses ("vertical", "horizontal");
-				} else {
-					recorder.recordResponses ("horizontal", "horizontal");
-				}
+		if (!isFinished) {
+			if (Input.GetKeyDown (KeyCode.LeftArrow)) {
 				swapSurface ();
-			} else if (Input.GetKeyDown (KeyCode.RightControl)) {
-				if (currentSurface.transform.Find ("vertical")) {
-					recorder.recordResponses ("vertical", "vertical");
-				} else {
-					recorder.recordResponses ("horizontal", "vertical");
-				}
+			} else if (Input.GetKeyDown (KeyCode.RightArrow)) {
 				swapSurface ();
+			}else if(Input.GetKeyDown(KeyCode.Space)){
+				recorder.recordResponses (distances [currentDistanceIndex].ToString(), currentSurface.Equals (surfaceVertical) ? "vertical" : "horizontal");
+				getNextSurface ();
+				if (!finished ()) {
+					scale ();
+				} else {
+					isFinished = true;
+					recorder.outputResult ();
+					deactivateAll ();
+				}
 			} else if (Input.GetKeyDown (KeyCode.S)) {
-				scale ();
+				if (!finished ()) {
+					scale ();
+				}
 			}
 		} else {
-			currentSurface.SetActive (false);
 			//do nothing for now, should have a message to say we're done.
 		}
 
 	}
 
 	void scale(){
-		currentDistanceIndex = (currentDistanceIndex + 1) % distances.Length;
+		currentDistanceIndex = getNextDistance();
 		float scale = distances [currentDistanceIndex] / initZDist;
 		scaleSurface (surfaceVertical, scale);
 		scaleSurface (surfaceHorizontal, scale);
@@ -156,8 +149,8 @@ public class DemoScript : MonoBehaviour {
 		float zPerm;
 		foreach (Transform t in children) {
 			if(t.name.Equals("Spotlight")){
-				xPerm = Random.Range (-maxPermX, maxPermX);
-				zPerm = Random.Range (-maxPermZ, maxPermZ);
+				xPerm = Random.value*maxPermX*2 - maxPermX;
+				zPerm = Random.value*maxPermZ*2 - maxPermZ;
 				t.transform.localPosition = new Vector3 (t.transform.localPosition.x + xPerm, t.transform.localPosition.y, t.transform.localPosition.z + zPerm);
 			}
 		}
@@ -184,6 +177,40 @@ public class DemoScript : MonoBehaviour {
 		}
 		currentSurface.SetActive (true);
 	}
+
+	//randomly returns one of the two surfaces
+	void getNextSurface(){
+		currentSurface.SetActive (false);
+		currentSurface =  Random.value > 0.5 ? surfaceHorizontal : surfaceVertical;
+		currentSurface.SetActive (true);
+	}
+
+	//choose next distance to display and increment the appropriate counter
+	int getNextDistance(){
+		int nextIndex = 0;
+		if (!finished ()) {
+			bool found = false;
+			while (!found) {
+				nextIndex = Random.Range (0, distances.Length);
+				if (nextIndex != currentDistanceIndex && distanceCounts [nextIndex] < numSamples) {
+					found = true;
+				}
+			}
+			distanceCounts [nextIndex]++;
+		}
+		return nextIndex;
+	}
+
+	bool finished(){
+		bool finished = true;
+		for (int i = 0; i < distanceCounts.Length; i++) {
+			if (distanceCounts [i] < numSamples) {
+				finished = false;
+			}
+		}
+		return finished;
+	}
+
 
 	void deactivateAll(){	
 		surfaceVertical.SetActive (false);

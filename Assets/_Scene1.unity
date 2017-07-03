@@ -13121,7 +13121,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &600047722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19698,13 +19698,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   surfaceHorizontal: {fileID: 600047721}
   surfaceVertical: {fileID: 705781729}
+  numSamples: 2
+  initCameraPos: {fileID: 288280694}
+  maxPermX: 0.5
+  maxPermZ: 1
   distances:
   - 8
   - 2
   - 50
-  initCameraPos: {fileID: 288280694}
-  maxPermX: 0.5
-  maxPermZ: 1
 --- !u!4 &912937436
 Transform:
   m_ObjectHideFlags: 0
