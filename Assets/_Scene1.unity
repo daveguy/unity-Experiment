@@ -2206,7 +2206,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   m_Lightmapping: 4
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 5.56
@@ -4062,7 +4062,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 24
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -4875,7 +4875,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -7076,7 +7076,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -7535,7 +7535,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   m_Lightmapping: 4
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 5.56
@@ -7591,7 +7591,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 20
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -8674,7 +8674,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -9028,7 +9028,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 25
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -9798,15 +9798,27 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 2037080, guid: 126d619cf4daa52469682f85c1378b4a, type: 2}
       propertyPath: m_BackGroundColor.r
-      value: 0
+      value: 0.14396392
       objectReference: {fileID: 0}
     - target: {fileID: 2037080, guid: 126d619cf4daa52469682f85c1378b4a, type: 2}
       propertyPath: m_BackGroundColor.g
-      value: 0.0037525054
+      value: 0.077314034
       objectReference: {fileID: 0}
     - target: {fileID: 2037080, guid: 126d619cf4daa52469682f85c1378b4a, type: 2}
       propertyPath: m_BackGroundColor.b
-      value: 0.5441177
+      value: 0.9558824
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 126d619cf4daa52469682f85c1378b4a, type: 2}
+      propertyPath: resetTrackerOnLoad
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2037080, guid: 126d619cf4daa52469682f85c1378b4a, type: 2}
+      propertyPath: m_OcclusionCulling
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 126d619cf4daa52469682f85c1378b4a, type: 2}
+      propertyPath: _trackingOriginType
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 126d619cf4daa52469682f85c1378b4a, type: 2}
@@ -11139,7 +11151,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -11997,7 +12009,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -12710,7 +12722,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 22
+      value: 23
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -14909,7 +14921,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -15297,7 +15309,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -16167,7 +16179,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -18703,7 +18715,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -19698,7 +19710,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   surfaceHorizontal: {fileID: 600047721}
   surfaceVertical: {fileID: 705781729}
-  numSamples: 2
+  numSamples: 50
   initCameraPos: {fileID: 288280694}
   maxPermX: 0.5
   maxPermZ: 1
@@ -20137,7 +20149,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!108 &932211752
 Light:
   m_ObjectHideFlags: 0
@@ -20148,7 +20160,7 @@ Light:
   serializedVersion: 8
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 19.58
+  m_Intensity: 7.63
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -21432,7 +21444,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -23893,7 +23905,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -26740,7 +26752,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -34267,7 +34279,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 15
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -34605,7 +34617,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 23
+      value: 24
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -37618,7 +37630,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 16
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -37777,7 +37789,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   m_Lightmapping: 4
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 5.56
@@ -38067,7 +38079,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 21
+      value: 22
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -40587,7 +40599,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 19
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -41393,7 +41405,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -41933,7 +41945,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   m_Lightmapping: 4
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 5.56
@@ -42503,7 +42515,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 17
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -43553,7 +43565,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   m_Lightmapping: 4
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 5.56
@@ -44006,7 +44018,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_RootOrder
-      value: 18
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5570844fc50e0084ca00e1e0cca023f7, type: 3}
       propertyPath: m_Materials.Array.data[0]

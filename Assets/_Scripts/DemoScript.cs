@@ -45,6 +45,59 @@ public class answerRecorder{
 	}
 }
 
+//holds all my conditions and sets up the scene
+public class Condition{
+	public enum Conditions { NEARVV = 0, NEARVH = 1, NEARHH = 2, FARVV = 3, FARVH = 4, FARHH = 5}; //, NEARVFARH = 6, FARVNEARH = 7};  add these two later, possibly by using a distance for each surface?
+	public Conditions currentCondition;
+
+	public float nearDist;
+	public float farDist;
+	public GameObject surfaceHorizontal;
+	public GameObject surfaceVertical;
+
+	public Condition (float nearDist, float farDist, GameObject surfaceHorizontal, GameObject surfaceVertical)
+	{
+		this.nearDist = nearDist;
+		this.farDist = farDist;
+		this.surfaceVertical = surfaceVertical;
+		this.surfaceHorizontal = surfaceHorizontal;
+		setNextCondition();
+	}
+
+	public float getDistance ()
+	{
+		return currentCondition==Conditions.NEARHH || currentCondition==Conditions.NEARVH || currentCondition==Conditions.NEARVV ? nearDist : farDist;
+	}
+
+	public GameObject getSurfaceOne ()
+	{
+		return surfaceVertical;
+	}
+
+	public GameObject getSurfaceTwo()
+	{
+		return surfaceVertical;
+	}
+
+	public void setNextCondition ()
+	{
+		int nextCondition;
+		bool finished = false;
+		while (!finished) {
+			nextCondition = Random.Range (0, System.Enum.GetNames (typeof(Conditions)).Length - 1);
+			if (currentCondition != (Conditions)nextCondition) {
+				currentCondition = (Conditions)nextCondition;
+				finished = true;
+			}
+		}
+	}
+
+	public string getCondition ()
+	{
+		return currentCondition.ToString();
+	}
+}
+
 public class DemoScript : MonoBehaviour {
 
 	public GameObject surfaceHorizontal;
@@ -62,6 +115,8 @@ public class DemoScript : MonoBehaviour {
 	private string filename;
 	private bool isFinished;
 
+	private Condition condition;
+
 	//variables for scaling
 	private Vector3 initScale;
 	private float initHaloScale;
@@ -75,6 +130,8 @@ public class DemoScript : MonoBehaviour {
 		StreamWriter sw = File.AppendText("output/demo-"+filename);
 		sw.WriteLine("The following is the demo results");
 		sw.Close();
+
+		condition = new Condition(distances[0], distances[1], surfaceHorizontal, surfaceVertical);
 
 		//set initial values for scaling
 		initScale = surfaceVertical.transform.localScale;
