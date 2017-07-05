@@ -45,9 +45,10 @@ public class answerRecorder{
 	}
 }
 
+public enum Conditions { NEARVV = 0, NEARVH = 1, NEARHH = 2, FARVV = 3, FARVH = 4, FARHH = 5, NEARVFARH = 6, FARVNEARH = 7};
+
 //holds all my conditions and sets up the scene
 public class Condition{
-	public enum Conditions { NEARVV = 0, NEARVH = 1, NEARHH = 2, FARVV = 3, FARVH = 4, FARHH = 5}; //, NEARVFARH = 6, FARVNEARH = 7};  add these two later, possibly by using a distance for each surface?
 	public Conditions currentCondition;
 
 	public float nearDist;
@@ -61,32 +62,45 @@ public class Condition{
 		this.farDist = farDist;
 		this.surfaceVertical = surfaceVertical;
 		this.surfaceHorizontal = surfaceHorizontal;
-		setNextCondition();
+//		setNextCondition();
 	}
 
-	public float getDistance ()
+	public float getDistanceOne ()
 	{
-		return currentCondition==Conditions.NEARHH || currentCondition==Conditions.NEARVH || currentCondition==Conditions.NEARVV ? nearDist : farDist;
+		return currentCondition==Conditions.NEARHH || currentCondition==Conditions.NEARVH || currentCondition==Conditions.NEARVV || currentCondition==Conditions.NEARVFARH ? nearDist : farDist;
 	}
 
-	public GameObject getSurfaceOne ()
+	public float getDistanceTwo ()
 	{
-		return surfaceVertical;
+		return currentCondition==Conditions.NEARHH || currentCondition==Conditions.NEARVH || currentCondition==Conditions.NEARVV ||currentCondition == Conditions.FARVNEARH ? nearDist : farDist;
 	}
 
-	public GameObject getSurfaceTwo()
-	{
-		return surfaceVertical;
-	}
+//	public GameObject getSurfaceOne ()
+//	{
+////		return currentCondition == Conditions.NEARVH || currentCondition == Conditions.NEARVV || currentCondition == Conditions.FARVH || currentCondition == Conditions.FARVV ? surfaceVertical : surfaceHorizontal;
+//		return surfaceVertical;
+//	}
+//
+//	public GameObject getSurfaceTwo()
+//	{
+////		return currentCondition == Conditions.FARHH || currentCondition == Conditions.FARVH || currentCondition == Conditions.NEARHH || currentCondition == Conditions.NEARVH ? surfaceHorizontal : surfaceVertical;
+//		return surfaceHorizontal;
+//	}
 
 	public void setNextCondition ()
 	{
 		int nextCondition;
 		bool finished = false;
+		int loopCount = 0;//
 		while (!finished) {
-			nextCondition = Random.Range (0, System.Enum.GetNames (typeof(Conditions)).Length - 1);
+			nextCondition = Random.Range (0, System.Enum.GetNames (typeof(Conditions)).Length);
 			if (currentCondition != (Conditions)nextCondition) {
 				currentCondition = (Conditions)nextCondition;
+				finished = true;
+			}
+			loopCount++;
+			if (loopCount > 1000) {
+				Debug.Log("infinite loop in setNextCondition");
 				finished = true;
 			}
 		}
@@ -96,26 +110,37 @@ public class Condition{
 	{
 		return currentCondition.ToString();
 	}
+
+	public int getNumConditions ()
+	{
+		return System.Enum.GetNames (typeof(Conditions)).Length;
+	}
+
 }
 
 public class DemoScript : MonoBehaviour {
 
-	public GameObject surfaceHorizontal;
-	public GameObject surfaceVertical;
+	public GameObject surfaceOne;
+	public GameObject surfaceTwo;
 	public int numSamples;//this is number of samples at each distance in distances
 	public Transform initCameraPos;
 	public float maxPermX;
 	public float maxPermZ;
 	public float[] distances;
 
-	private int[] distanceCounts;
+//	private int[] distanceCounts;
 	private GameObject currentSurface;
-	private int currentDistanceIndex;
+//	private int currentDistanceIndex;
 	private answerRecorder recorder;
 	private string filename;
 	private bool isFinished;
 
 	private Condition condition;
+	private int[] trialCounts;
+	private float distanceSurfaceOne;
+	private float distanceSurfaceTwo;
+//	private GameObject surfaceOne;
+//	private GameObject surfaceTwo;
 
 	//variables for scaling
 	private Vector3 initScale;
@@ -131,20 +156,25 @@ public class DemoScript : MonoBehaviour {
 		sw.WriteLine("The following is the demo results");
 		sw.Close();
 
-		condition = new Condition(distances[0], distances[1], surfaceHorizontal, surfaceVertical);
+		condition = new Condition(distances[0], distances[1], surfaceOne, surfaceOne);
 
 		//set initial values for scaling
-		initScale = surfaceVertical.transform.localScale;
-		initZDist = surfaceVertical.transform.position.z;
-		initLightScale = surfaceVertical.transform.Find ("lights/Spotlight").GetComponent<Light> ().range;
-		initHaloScale = surfaceVertical.transform.Find ("lights/Spotlight/halo").GetComponent<Light> ().range;
+		initScale = surfaceOne.transform.localScale;
+		initZDist = surfaceOne.transform.position.z;
+		initLightScale = surfaceOne.transform.Find ("lights/Spotlight").GetComponent<Light> ().range;
+		initHaloScale = surfaceOne.transform.Find ("lights/Spotlight/halo").GetComponent<Light> ().range;
 
 		deactivateAll ();
-		recorder = new answerRecorder (numSamples*distances.Length, filename);
-		distanceCounts = new int[distances.Length];
-		scale ();
-		currentSurface = surfaceVertical;
-		getNextSurface();
+		trialCounts = new int[condition.getNumConditions()];
+		recorder = new answerRecorder (numSamples*condition.getNumConditions() + 50, filename);
+		currentSurface = surfaceOne;
+		getNextCondition();
+//		distanceCounts = new int[distances.Length];
+		print(condition.currentCondition.ToString());
+//		print((int)condition.currentCondition);
+		scale (surfaceOne, distanceSurfaceOne);
+		scale(surfaceTwo, distanceSurfaceTwo);
+//		getNextSurface();
 	}
 	
 
@@ -156,10 +186,14 @@ public class DemoScript : MonoBehaviour {
 			} else if (Input.GetKeyDown (KeyCode.RightArrow)) {
 				swapSurface ();
 			}else if(Input.GetKeyDown(KeyCode.Space)){
-				recorder.recordResponses (distances [currentDistanceIndex].ToString(), currentSurface.Equals (surfaceVertical) ? "vertical" : "horizontal");
-				getNextSurface ();
+				recorder.recordResponses (condition.currentCondition.ToString(), currentSurface.Equals (surfaceOne) ? "vertical" : "horizontal");
+//				getNextSurface ();
 				if (!finished ()) {
-					scale ();
+					getNextCondition();
+					print(condition.currentCondition.ToString());
+//					print((int)condition.currentCondition);
+					scale (surfaceOne, distanceSurfaceOne);
+					scale(surfaceTwo, distanceSurfaceTwo);
 				} else {
 					isFinished = true;
 					recorder.outputResult ();
@@ -167,7 +201,9 @@ public class DemoScript : MonoBehaviour {
 				}
 			} else if (Input.GetKeyDown (KeyCode.S)) {
 				if (!finished ()) {
-					scale ();
+					getNextCondition();
+					scale (surfaceOne, distanceSurfaceOne);
+					scale(surfaceTwo, distanceSurfaceTwo);
 				}
 			}
 		} else {
@@ -176,19 +212,15 @@ public class DemoScript : MonoBehaviour {
 
 	}
 
-	void scale(){
-		currentDistanceIndex = getNextDistance();
-		float scale = distances [currentDistanceIndex] / initZDist;
-		scaleSurface (surfaceVertical, scale);
-		scaleSurface (surfaceHorizontal, scale);
-		resetLights (surfaceVertical);
-		permuteLights (surfaceVertical);
-		resetLights (surfaceHorizontal);
-		permuteLights (surfaceHorizontal);
+	void scale(GameObject surface, float scaleDistance){
+		scaleSurface (surface, scaleDistance );
+		resetLights (surface);
+		permuteLights (surface);
 	}
 
-	void scaleSurface(GameObject surface, float scale){
-		surface.transform.position = new Vector3 (surface.transform.position.x, 1-scale, distances [currentDistanceIndex]);
+	void scaleSurface(GameObject surface, float scaleDistance){
+		float scale = scaleDistance / initZDist;
+		surface.transform.position = new Vector3 (surface.transform.position.x, 1-scale, scaleDistance);
 		surface.transform.localScale = new Vector3 (initScale.x * scale, initScale.y * scale, initScale.z * scale);
 		Light[] lights = surface.transform.Find ("lights").GetComponentsInChildren<Light> ();
 		foreach (Light l in lights) {
@@ -223,45 +255,86 @@ public class DemoScript : MonoBehaviour {
 		}
 	}
 
-	void swapSurface(){
+	void swapSurface ()
+	{
 		currentSurface.SetActive (false);
-		if (currentSurface == surfaceHorizontal) {
-			currentSurface = surfaceVertical;
-			initCameraPos.position = new Vector3 (0, 1, 0);
+		if (currentSurface == surfaceOne) {//swap surface
+			currentSurface = surfaceTwo;
 		} else {
-			currentSurface = surfaceHorizontal;
-			initCameraPos.position = new Vector3 (0, 1, -1000);
+			currentSurface = surfaceOne;
 		}
-		currentSurface.SetActive (true);
-	}
-
-	//randomly returns one of the two surfaces
-	void getNextSurface(){
-		currentSurface.SetActive (false);
-		currentSurface =  Random.value > 0.5 ? surfaceHorizontal : surfaceVertical;
-		currentSurface.SetActive (true);
-	}
-
-	//choose next distance to display and increment the appropriate counter
-	int getNextDistance(){
-		int nextIndex = 0;
-		if (!finished ()) {
-			bool found = false;
-			while (!found) {
-				nextIndex = Random.Range (0, distances.Length);
-				if (nextIndex != currentDistanceIndex && distanceCounts [nextIndex] < numSamples) {
-					found = true;
-				}
+		if (currentSurface == surfaceOne) {
+			if (condition.currentCondition == Conditions.FARHH || condition.currentCondition == Conditions.NEARHH) {
+				initCameraPos.position = new Vector3 (0, 1, -1000);
+			} else {
+				initCameraPos.position = new Vector3 (0, 1, 0);
 			}
-			distanceCounts [nextIndex]++;
+		} else {
+			if (condition.currentCondition == Conditions.FARVV || condition.currentCondition == Conditions.NEARVV) {
+				initCameraPos.position = new Vector3 (0, 1, 0);
+			} else {
+				initCameraPos.position = new Vector3 (0, 1, -1000);
+			}
 		}
-		return nextIndex;
+		currentSurface.SetActive (true);
+	}
+
+	//sets the next condition and loads surfaces and distances, randomly sets on of the surfaces as currentSurface
+	void getNextCondition ()
+	{
+		currentSurface.SetActive(false);
+		condition.setNextCondition ();
+		bool finished = false;
+		int loopCount = 0;
+		while (!finished) {
+			if (trialCounts [(int)condition.currentCondition] < numSamples) {
+				finished = true;
+			} else {
+				condition.setNextCondition();
+			}
+			loopCount++;
+			if (loopCount > 1000) {
+				Debug.Log("infinite loop in getNextCondition");
+				finished = true;
+			}
+		}
+//		surfaceOne = condition.getSurfaceOne();
+//		surfaceTwo = condition.getSurfaceTwo();
+		distanceSurfaceOne = condition.getDistanceOne();
+		distanceSurfaceTwo = condition.getDistanceTwo();
+		trialCounts[(int)condition.currentCondition]++;
+		print(printArray());
+
+		currentSurface =  Random.value > 0.5 ? surfaceOne : surfaceTwo;
+		if (currentSurface == surfaceOne) {
+			if (condition.currentCondition == Conditions.FARHH || condition.currentCondition == Conditions.NEARHH) {
+				initCameraPos.position = new Vector3 (0, 1, -1000);
+			} else {
+				initCameraPos.position = new Vector3 (0, 1, 0);
+			}
+		} else {
+			if (condition.currentCondition == Conditions.FARVV || condition.currentCondition == Conditions.NEARVV) {
+				initCameraPos.position = new Vector3 (0, 1, 0);
+			} else {
+				initCameraPos.position = new Vector3 (0, 1, -1000);
+			}
+		}
+		currentSurface.SetActive (true);
+	}
+
+	string printArray ()
+	{
+		string res = "";
+		foreach (int i in trialCounts) {
+			res = res + " " + i;
+		}
+		return res;
 	}
 
 	bool finished(){
 		bool finished = true;
-		for (int i = 0; i < distanceCounts.Length; i++) {
-			if (distanceCounts [i] < numSamples) {
+		for (int i = 0; i < trialCounts.Length; i++) {
+			if (trialCounts [i] < numSamples) {
 				finished = false;
 			}
 		}
@@ -270,7 +343,7 @@ public class DemoScript : MonoBehaviour {
 
 
 	void deactivateAll(){	
-		surfaceVertical.SetActive (false);
-		surfaceHorizontal.SetActive (false);		
+		surfaceOne.SetActive (false);
+		surfaceTwo.SetActive (false);		
 	}
 }
