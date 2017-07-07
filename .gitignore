@@ -31,3 +31,6 @@ sysinfo.txt
 
 # ignore outputted csv's
 *.csv
+
+#ignore generated output
+output*

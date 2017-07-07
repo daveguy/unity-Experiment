@@ -25,7 +25,7 @@ public class answerRecorder{
 
 	public void outputResult ()
 	{
-		StreamWriter sw = File.AppendText("output/demo-"+filename);
+		StreamWriter sw = File.AppendText("outputExperiment1/experiment1-"+filename);
 		sw.Write("DISTANCE: ,");
 		for (int i = 0; i < distances.Length; i++) {
 			sw.Write (distances [i]);
@@ -149,11 +149,11 @@ public class DemoScript : MonoBehaviour {
 	private float initZDist;
 
 	void Start () {
-		//wriute headers to output
+		//write headers to output
 		filename = string.Format("{0}.csv", System.DateTime.Now.ToString("yyyy-MMM-dd-HH-mm-ss"));
-		System.IO.Directory.CreateDirectory("output/");
-		StreamWriter sw = File.AppendText("output/demo-"+filename);
-		sw.WriteLine("The following is the demo results");
+		System.IO.Directory.CreateDirectory("outputExperiment1/");
+		StreamWriter sw = File.AppendText("outputExperiment1/demo-"+filename);
+		sw.WriteLine("The following are the experiment results");
 		sw.Close();
 
 		condition = new Condition(distances[0], distances[1], surfaceOne, surfaceOne);

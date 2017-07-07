@@ -6054,6 +6054,8 @@ MonoBehaviour:
   maxPermX: 0.5
   maxPermZ: 1
   useLights: 1
+  mask: {fileID: 1930172975}
+  maskTime: 1
 --- !u!1001 &682027604
 Prefab:
   m_ObjectHideFlags: 0

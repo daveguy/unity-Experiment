@@ -1,6 +1,50 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+
+public class Recorder{
+
+	public string[] trials;
+	public string[] responses;
+
+	private int currentTrial;
+	private string filename;
+
+	public Recorder(int numTrials, string filename){
+		this.trials = new string[numTrials];
+		this.responses = new string[numTrials];
+		currentTrial = 0;
+		this.filename = filename;
+	}
+
+	public void recordResult(string trial, string response){
+		trials [currentTrial] = trial;
+		responses [currentTrial] = response;
+		currentTrial++;
+	}
+
+	public void outputResult ()
+	{
+		StreamWriter sw = File.AppendText("outputExperiment2/demo-"+filename);
+		sw.Write("CONDITION: ,");
+		for (int i = 0; i < trials.Length; i++) {
+			sw.Write (trials [i]);
+			if (i < trials.Length - 1) {
+				sw.Write (",");
+			}
+		}
+		sw.Write("\n");
+		sw.Write ("USERRESPONSE:,");
+		for (int i = 0; i < responses.Length; i++) {
+			sw.Write (responses [i]);
+			if (i < responses.Length - 1) {
+				sw.Write (",");
+			}
+		}
+		sw.Close();
+	}
+}
 
 public class ExpermentScript : MonoBehaviour {
 
@@ -11,6 +55,8 @@ public class ExpermentScript : MonoBehaviour {
 	public float maxPermX;
 	public float maxPermZ;
 	public bool useLights = true;
+	public GameObject mask;
+	public float maskTime;
 
 	//variables for scaling
 	private Vector3 initScale;
@@ -24,8 +70,18 @@ public class ExpermentScript : MonoBehaviour {
 	private int currentTrialIndex;
 	private bool isFinished;
 	private bool lightsOn;
+	private string filename;
+	private Recorder recorder;
+	private bool showMask;
+	private System.DateTime maskStartTime;
 
 	void Start () {
+		//write headers to output
+		filename = string.Format("{0}.csv", System.DateTime.Now.ToString("yyyy-MMM-dd-HH-mm-ss"));
+		System.IO.Directory.CreateDirectory("outputExperiment2/");
+		StreamWriter sw = File.AppendText("outputExperiment2/demo-"+filename);
+		sw.WriteLine("The following are the experiment results. Format is distance:angle:lightsOn");
+		sw.Close();
 
 		//set initial values for scaling
 		initScale = surface.transform.localScale;
@@ -35,7 +91,9 @@ public class ExpermentScript : MonoBehaviour {
 
 		isFinished = false;
 		lightsOn = true;
+		showMask = false;
 		trialCounts = new int[useLights ? distances.Length * angles.Length * 2 : distances.Length * angles.Length];
+		recorder = new Recorder (trialCounts.Length * numSamples, filename);
 		setNextIndex ();
 		scale (surface, distances [currentDistIndex]);
 		angle (surface, angles [currentAngleIndex]);
@@ -43,7 +101,12 @@ public class ExpermentScript : MonoBehaviour {
 
 	void Update () {
 		if (!isFinished) {
-			testInputs ();
+			if (!showMask) {
+				testInputs ();
+			} else if ((System.DateTime.Now - maskStartTime).TotalSeconds > maskTime) {
+				showMask = false;
+				mask.SetActive (false);
+			}
 		} else {
 			surface.SetActive (false);
 			//do nothingfor now, experiment over
@@ -61,12 +124,17 @@ public class ExpermentScript : MonoBehaviour {
 			lightsOn = lightsOn == false;
 			toggleLights (surface, lightsOn);
 		} else if (Input.GetKeyDown (KeyCode.Space)) {
+			recorder.recordResult (distances [currentDistIndex] + ":" + angles [currentAngleIndex] + ":" + lightsOn, "userResponse");
+			showMask = true;
+			mask.SetActive (true);
 			if (!finished ()) {
 				setNextIndex ();
 				scale (surface, distances [currentDistIndex]);
 				angle (surface, angles [currentAngleIndex]);
+				maskStartTime = System.DateTime.Now;
 			} else {
 				isFinished = true;
+				recorder.outputResult ();
 			}
 		}
 	}
@@ -83,6 +151,12 @@ public class ExpermentScript : MonoBehaviour {
 				int desired = nextIndex >= distances.Length * angles.Length ? nextIndex - (distances.Length * angles.Length) : nextIndex;
 //				print ("current trial index: " + currentTrialIndex);
 //				print ("desired: " + desired);
+				if (currentTrialIndex >= distances.Length * angles.Length) {
+					lightsOn = false;
+				} else {
+					lightsOn = true;
+				}
+				toggleLights (surface, lightsOn);
 				if (desired > 0) {
 					currentDistIndex = desired % distances.Length;
 					currentAngleIndex = (int)Mathf.Floor (desired / distances.Length);
