@@ -48,7 +48,8 @@ public class Recorder{
 
 public class ExpermentScript : MonoBehaviour {
 
-	public GameObject surface;
+	public GameObject surfaceOne;
+	public GameObject surfaceTwo;
 	public int numSamples;
 	public float[] distances;
 	public float[] angles;
@@ -74,6 +75,7 @@ public class ExpermentScript : MonoBehaviour {
 	private Recorder recorder;
 	private bool showMask;
 	private System.DateTime maskStartTime;
+	private GameObject currentSurface;
 
 	void Start () {
 		//write headers to output
@@ -84,62 +86,83 @@ public class ExpermentScript : MonoBehaviour {
 		sw.Close();
 
 		//set initial values for scaling
-		initScale = surface.transform.localScale;
-		initZDist = surface.transform.position.z;
-		initLightScale = surface.transform.Find ("lights/Spotlight").GetComponent<Light> ().range;
-		initHaloScale = surface.transform.Find ("lights/Spotlight/halo").GetComponent<Light> ().range;
+		initScale = surfaceOne.transform.localScale;
+		initZDist = surfaceOne.transform.position.z;
+		initLightScale = surfaceOne.transform.Find ("lights/Spotlight").GetComponent<Light> ().range;
+		initHaloScale = surfaceOne.transform.Find ("lights/Spotlight/halo").GetComponent<Light> ().range;
 
+		deactivateAll();
 		isFinished = false;
 		lightsOn = true;
 		showMask = false;
 		trialCounts = new int[useLights ? distances.Length * angles.Length * 2 : distances.Length * angles.Length];
 		recorder = new Recorder (trialCounts.Length * numSamples, filename);
-		setNextIndex ();
-		scale (surface, distances [currentDistIndex]);
-		angle (surface, angles [currentAngleIndex]);
+		currentSurface = surfaceOne;
+		setNextIndex (surfaceOne);
+		scale (surfaceOne, distances [currentDistIndex]);
+		angle (surfaceOne, angles [currentAngleIndex]);
+		currentSurface.SetActive(true);
 	}
 
 	void Update () {
 		if (!isFinished) {
 			if (!showMask) {
-				testInputs ();
+				if(Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow)){
+					showMask = true;
+					mask.SetActive (true);
+					swapSurfaces();
+					maskStartTime = System.DateTime.Now;
+				}else if (Input.GetKeyDown (KeyCode.Space)) {
+					recorder.recordResult (distances [currentDistIndex] + ":" + angles [currentAngleIndex] + ":" + lightsOn, "userResponse");
+					showMask = true;
+					mask.SetActive (true);
+					if (!finished ()) {
+						setNextIndex (currentSurface);
+						scale (currentSurface, distances [currentDistIndex]);
+						angle (currentSurface, angles [currentAngleIndex]);
+						maskStartTime = System.DateTime.Now;
+					} else {
+						isFinished = true;
+						recorder.outputResult ();
+					}
+			}else{
+					testInputs ();
+				}
 			} else if ((System.DateTime.Now - maskStartTime).TotalSeconds > maskTime) {
 				showMask = false;
 				mask.SetActive (false);
 			}
 		} else {
-			surface.SetActive (false);
+			deactivateAll();
 			//do nothingfor now, experiment over
 		}
+	}
+
+	void swapSurfaces ()
+	{	
+		currentSurface.SetActive (false);
+		if (currentSurface == surfaceOne) {
+			currentSurface = surfaceTwo;
+		} else {
+			currentSurface = surfaceOne;
+		}
+		currentSurface.SetActive(true);
 	}
 
 	void testInputs(){
 		if (Input.GetKeyDown (KeyCode.S)) {
 			currentDistIndex = (currentDistIndex + 1) % distances.Length;
-			scale (surface, distances [currentDistIndex]);
+			scale (currentSurface, distances [currentDistIndex]);
 		} else if (Input.GetKeyDown (KeyCode.A)) {
 			currentAngleIndex = (currentAngleIndex + 1) % angles.Length;
-			angle (surface, angles [currentAngleIndex]);
+			angle (currentSurface, angles [currentAngleIndex]);
 		} else if (Input.GetKeyDown (KeyCode.L)) {
 			lightsOn = lightsOn == false;
-			toggleLights (surface, lightsOn);
-		} else if (Input.GetKeyDown (KeyCode.Space)) {
-			recorder.recordResult (distances [currentDistIndex] + ":" + angles [currentAngleIndex] + ":" + lightsOn, "userResponse");
-			showMask = true;
-			mask.SetActive (true);
-			if (!finished ()) {
-				setNextIndex ();
-				scale (surface, distances [currentDistIndex]);
-				angle (surface, angles [currentAngleIndex]);
-				maskStartTime = System.DateTime.Now;
-			} else {
-				isFinished = true;
-				recorder.outputResult ();
-			}
-		}
+			toggleLights (currentSurface, lightsOn);
+		} 
 	}
 
-	void setNextIndex(){
+	void setNextIndex(GameObject surface){
 		bool finished = false;
 		int nextIndex = 0;
 		while (!finished) {
@@ -244,5 +267,10 @@ public class ExpermentScript : MonoBehaviour {
 
 	void angle(GameObject surface, float angle){
 		surface.transform.localEulerAngles = new Vector3 (-90 + angle, 0, 0);
+	}
+
+	void deactivateAll(){	
+		surfaceOne.SetActive (false);
+		surfaceTwo.SetActive (false);		
 	}
 }
