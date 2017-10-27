@@ -6,7 +6,7 @@ Shader "Custom/SpecularShaderMatte" {
 		_Specular ("Specular", Color) = (1,1,1,1)
 		_HighlightThreshold ("Highlight Threshold", Range(0,1)) = 0
 		_Bump ("Normal Map", 2D) = "bump" {}
-		_SpecularPower ("Smoothness", Range(0,1.75)) = 0.5
+		_Glossiness ("Smoothness", Range(0,1.75)) = 0.5
 		_WhiteThreshold ("white threshold", Range(0.001, 1)) = 1
 		_reverseColors("reverse colors", Range(0,1)) = 1
 		_mainTex("texture", 2D) = "white" {}
@@ -50,14 +50,14 @@ Shader "Custom/SpecularShaderMatte" {
 		fixed _reverseColors;
 		sampler2D _Bump;
 		sampler2D _mainTex;
-		half _SpecularPower;
+		half _Glossiness;
 		sampler2D _GrabTexture;
 		float4 _initCameraPos;
 
 		void surf (Input IN, inout SurfaceOutputDave o) {
 			o.Albedo = _Color.rgb;
 			o.Specular = _Specular.rgb;
-			o.SpecularPower = _SpecularPower;
+			o.SpecularPower = _Glossiness;
 			o.Alpha = _Color.a;
 			o.Normal = UnpackNormal (tex2D (_Bump, IN.uv_BumpMap));
 			o.worldPos = IN.worldPos;
@@ -74,23 +74,23 @@ Shader "Custom/SpecularShaderMatte" {
 			float spec = pow (nh, s.SpecularPower*512);
 
 			half3 objectCol;
-//			s.Albedo *= s.AlbedoTex;
 			objectCol = (s.Albedo*_LightColor0.rgb*diff + _LightColor0.rgb*spec)*atten;
-//			objectCol = (s.AlbedoTex*_LightColor0.rgb*diff + _LightColor0.rgb*s.Specular*spec)*atten;
 
 			//All of my various different testing options
-			if(sqrt(objectCol.r*objectCol.r+objectCol.g*objectCol.g+objectCol.b*objectCol.b) < _HighlightThreshold){
-				objectCol.rgb = 0;
-			}
-			if(objectCol.r > _WhiteThreshold){
-				objectCol.rgb =1;
-			}
-			if(_reverseColors < 0.5){
-				objectCol = half3(0.2,0.2,0.2) - objectCol;
-			}
+//			if(sqrt(objectCol.r*objectCol.r+objectCol.g*objectCol.g+objectCol.b*objectCol.b) < _HighlightThreshold){
+//				objectCol.rgb = 0;
+//			}
+//			if(objectCol.r > _WhiteThreshold){
+//				objectCol.rgb =1;
+//			}
+//			if(_reverseColors < 0.5){
+//				objectCol = half3(0.2,0.2,0.2) - objectCol;
+//			}
 			half4 c;
 //			half3 test = lerp(half3(0.0,0.0,0.0), objectCol, s.Alpha);
-			c.rgb = lerp(half3(0.0,0.0,0.0), objectCol, s.Alpha);
+//			c.rgb = lerp(half3(0.0,0.0,0.0), objectCol, s.Alpha);
+			c.rgb = objectCol;
+//			c.rgb = fixed3(nh,nh,nh)*0.1;
 			c.a = s.Alpha;
 
 

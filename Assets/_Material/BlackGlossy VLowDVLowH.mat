@@ -7,8 +7,8 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: BlackGlossy VLowDVLowH
-  m_Shader: {fileID: 4800000, guid: 5f0d0cb7270c55749820e5ea6b7722fa, type: 3}
-  m_ShaderKeywords: _ALPHABLEND_ON _EMISSION _GLOSSYREFLECTIONS_OFF _NORMALMAP
+  m_Shader: {fileID: 4800000, guid: 4a6c253386fd45c4b99c91f2808ff741, type: 3}
+  m_ShaderKeywords: _ALPHABLEND_ON _EMISSION _GLOSSYREFLECTIONS_OFF
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
   m_CustomRenderQueue: -1
@@ -18,11 +18,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Bump:
-        m_Texture: {fileID: 2800000, guid: 48199c4db92e97342ae0c8e52b6a5a2b, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: 48199c4db92e97342ae0c8e52b6a5a2b, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -61,25 +61,32 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _mainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 10
     - _GlossMapScale: 1
-    - _Glossiness: 0.56
+    - _Glossiness: 0.25
     - _GlossyReflections: 0
     - _HighlightThreshold: 0
-    - _Metallic: 0.595
+    - _Metallic: 0
     - _Mode: 2
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _Shininess: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
+    - _SpecularPower: 0.68
     - _SrcBlend: 5
     - _UVSec: 0
+    - _WhiteThreshold: 1
     - _ZWrite: 0
+    - _reverseColors: 1
     m_Colors:
     - _Color: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
