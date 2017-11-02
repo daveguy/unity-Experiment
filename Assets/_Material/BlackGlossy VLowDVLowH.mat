@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: BlackGlossy VLowDVLowH
-  m_Shader: {fileID: 4800000, guid: 4a6c253386fd45c4b99c91f2808ff741, type: 3}
+  m_Shader: {fileID: 4800000, guid: 5f0d0cb7270c55749820e5ea6b7722fa, type: 3}
   m_ShaderKeywords: _ALPHABLEND_ON _EMISSION _GLOSSYREFLECTIONS_OFF
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
@@ -71,10 +71,10 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 10
     - _GlossMapScale: 1
-    - _Glossiness: 0.25
+    - _Glossiness: 0.84
     - _GlossyReflections: 0
     - _HighlightThreshold: 0
-    - _Metallic: 0
+    - _Metallic: 0.58
     - _Mode: 2
     - _OcclusionStrength: 1
     - _Parallax: 0.02
